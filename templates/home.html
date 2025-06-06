@@ -1,0 +1,816 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Taskly{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dashboard-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 20px 20px;
+    }
+    
+    .welcome-text {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .welcome-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin-bottom: 0;
+    }
+    
+    .stats-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        border: 1px solid #f1f3f4;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    .stats-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .stats-number {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .stats-label {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-bottom: 0;
+    }
+    
+    .progress-thin {
+        height: 6px;
+        border-radius: 3px;
+    }
+    
+    .section-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #2c3e50;
+    }
+    
+    .task-item, .event-item {
+        background: white;
+        border-radius: 10px;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        border-left: 4px solid #dee2e6;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+    
+    .task-item:hover, .event-item:hover {
+        transform: translateX(5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .task-item.priority-high {
+        border-left-color: #dc3545;
+    }
+    
+    .task-item.priority-medium {
+        border-left-color: #ffc107;
+    }
+    
+    .task-item.priority-low {
+        border-left-color: #28a745;
+    }
+    
+    .task-title {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        font-size: 0.95rem;
+    }
+    
+    .task-meta {
+        font-size: 0.8rem;
+        color: #6c757d;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+    
+    .priority-badge {
+        font-size: 0.7rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 12px;
+        font-weight: 500;
+    }
+    
+    .status-badge {
+        font-size: 0.7rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 12px;
+        font-weight: 500;
+    }
+    
+    .quick-actions {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+    
+    .action-btn {
+        width: 100%;
+        padding: 0.75rem;
+        margin-bottom: 0.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        transition: all 0.3s ease;
+    }
+    
+    .action-btn:hover {
+        transform: translateX(5px);
+        text-decoration: none;
+    }
+    
+    .calendar-widget {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+    
+    .calendar-day {
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .calendar-day:hover {
+        background: #e9ecef;
+    }
+    
+    .calendar-day.today {
+        background: #667eea;
+        color: white;
+        font-weight: 600;
+    }
+    
+    .calendar-day.has-events {
+        position: relative;
+    }
+    
+    .calendar-day.has-events::after {
+        content: '';
+        position: absolute;
+        bottom: 2px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 4px;
+        background: #ffc107;
+        border-radius: 50%;
+    }
+    
+    .urgent-alert {
+        background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        color: white;
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 1.5rem;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7); }
+        70% { box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 2rem;
+        color: #6c757d;
+    }
+    
+    .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+    
+    @media (max-width: 768px) {
+        .welcome-text {
+            font-size: 2rem;
+        }
+        
+        .stats-card {
+            margin-bottom: 1rem;
+        }
+        
+        .dashboard-header {
+            padding: 1.5rem 0;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="welcome-text">
+                    ¡Hola, {{ session.full_name.split()[0] }}! 👋
+                </h1>
+                <p class="welcome-subtitle">
+                    <i class="fas fa-calendar-day me-2"></i>
+                    Hoy es un gran día para ser productivo
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <div class="d-flex gap-2 justify-content-md-end justify-content-center mt-3 mt-md-0">
+                    <a href="{{ url_for('tasks.add_task') }}" class="btn btn-light">
+                        <i class="fas fa-plus me-1"></i>Nueva Tarea
+                    </a>
+                    <a href="{{ url_for('events.add_event') }}" class="btn btn-outline-light">
+                        <i class="fas fa-calendar-plus me-1"></i>Nuevo Evento
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Alertas Urgentes -->
+    {% if urgent_tasks %}
+    <div class="urgent-alert">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-exclamation-triangle me-3" style="font-size: 1.5rem;"></i>
+            <div class="flex-grow-1">
+                <h6 class="mb-1">¡Atención! Tienes {{ urgent_tasks|length }} tarea{{ 's' if urgent_tasks|length != 1 else '' }} urgente{{ 's' if urgent_tasks|length != 1 else '' }}</h6>
+                <small>
+                    {% for task in urgent_tasks[:2] %}
+                        "{{ task.title }}"{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                    {% if urgent_tasks|length > 2 %}y {{ urgent_tasks|length - 2 }} más{% endif %}
+                </small>
+            </div>
+            <a href="{{ url_for('tasks.urgent_tasks') }}" class="btn btn-light btn-sm">
+                Ver Todas
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Estadísticas Principales -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-icon bg-primary text-white">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <div class="stats-number text-primary">{{ task_stats.total }}</div>
+                <p class="stats-label">Total de Tareas</p>
+                <div class="progress progress-thin">
+                    <div class="progress-bar bg-primary" 
+                         id="completion-progress" 
+                         data-total="{{ task_stats.total }}" 
+                         data-completed="{{ task_stats.completed }}"></div>
+                </div>
+                <small class="text-muted">{{ task_stats.completed }} completadas</small>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-icon bg-warning text-white">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stats-number text-warning">{{ task_stats.pending }}</div>
+                <p class="stats-label">Tareas Pendientes</p>
+                {% if task_stats.urgent > 0 %}
+                <div class="mt-2">
+                    <span class="badge bg-danger">{{ task_stats.urgent }} urgentes</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-icon bg-success text-white">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="stats-number text-success">{{ upcoming_events|length }}</div>
+                <p class="stats-label">Eventos Próximos</p>
+                {% if this_week_events %}
+                <small class="text-muted">{{ this_week_events|length }} esta semana</small>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-icon bg-info text-white">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stats-number text-info" 
+                     id="productivity-percent"
+                     data-total="{{ task_stats.total }}" 
+                     data-completed="{{ task_stats.completed }}">0%</div>
+                <p class="stats-label">Productividad</p>
+                <small class="text-muted" id="productivity-text">Crea tu primera tarea</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Tareas Recientes -->
+        <div class="col-lg-6 mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="section-title">
+                    <i class="fas fa-list-check me-2 text-primary"></i>
+                    Tareas Recientes
+                </h3>
+                <a href="{{ url_for('tasks.tasks') }}" class="btn btn-outline-primary btn-sm">
+                    Ver Todas
+                </a>
+            </div>
+            
+            {% if recent_tasks %}
+                {% for task in recent_tasks %}
+                <div class="task-item priority-{{ task.priority }}">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="flex-grow-1">
+                            <div class="task-title">{{ task.title }}</div>
+                            <div class="task-meta">
+                                <span>
+                                    <i class="fas fa-flag me-1"></i>
+                                    <span class="priority-badge badge bg-{{ task.get_priority_color() }}">
+                                        {{ task.priority.title() }}
+                                    </span>
+                                </span>
+                                <span>
+                                    <i class="fas fa-circle me-1"></i>
+                                    <span class="status-badge badge bg-{% if task.status == 'completed' %}success{% elif task.status == 'in_progress' %}warning{% else %}secondary{% endif %}">
+                                        {% if task.status == 'completed' %}Completada
+                                        {% elif task.status == 'in_progress' %}En Progreso
+                                        {% else %}Pendiente
+                                        {% endif %}
+                                    </span>
+                                </span>
+                                {% if task.due_date %}
+                                <span>
+                                    <i class="fas fa-calendar me-1"></i>
+                                    {{ task.due_date.strftime('%d/%m') }}
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" 
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="{{ url_for('tasks.edit_task', task_id=task.task_id) }}">
+                                        <i class="fas fa-edit me-2"></i>Editar
+                                    </a>
+                                </li>
+                                <li>
+                                    <button class="dropdown-item" 
+                                            data-task-id="{{ task.task_id }}"
+                                            onclick="toggleTaskStatus(this.dataset.taskId)">
+                                        <i class="fas fa-check me-2"></i>
+                                        {% if task.status == 'completed' %}Marcar Pendiente{% else %}Completar{% endif %}
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-tasks"></i>
+                    <h5>No hay tareas aún</h5>
+                    <p>Crea tu primera tarea para empezar a organizarte</p>
+                    <a href="{{ url_for('tasks.add_task') }}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Crear Tarea
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Eventos Próximos -->
+        <div class="col-lg-6 mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="section-title">
+                    <i class="fas fa-calendar-alt me-2 text-success"></i>
+                    Próximos Eventos
+                </h3>
+                <a href="{{ url_for('events.event_calendar') }}" class="btn btn-outline-success btn-sm">
+                    Ver Calendario
+                </a>
+            </div>
+            
+            {% if upcoming_events %}
+                {% for event in upcoming_events %}
+                <div class="event-item" style="border-left-color: #28a745;">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="flex-grow-1">
+                            <div class="task-title">{{ event.title }}</div>
+                            <div class="task-meta">
+                                <span>
+                                    <i class="fas fa-calendar me-1"></i>
+                                    {{ event.event_date.strftime('%d/%m/%Y') }}
+                                </span>
+                                <span>
+                                    <i class="fas fa-clock me-1"></i>
+                                    {{ event.event_date.strftime('%H:%M') }}
+                                </span>
+                                {% if event.location %}
+                                <span>
+                                    <i class="fas fa-map-marker-alt me-1"></i>
+                                    {{ event.location[:20] }}{% if event.location|length > 20 %}...{% endif %}
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <a href="{{ url_for('events.view_event', event_id=event.event_id) }}" 
+                           class="btn btn-sm btn-outline-success">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h5>No hay eventos próximos</h5>
+                    <p>Agenda tu primer evento para no olvidar fechas importantes</p>
+                    <a href="{{ url_for('events.add_event') }}" class="btn btn-success">
+                        <i class="fas fa-plus me-2"></i>Crear Evento
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Acciones Rápidas y Mini Calendario -->
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="quick-actions">
+                <h4 class="section-title">
+                    <i class="fas fa-bolt me-2 text-warning"></i>
+                    Acciones Rápidas
+                </h4>
+                
+                <a href="{{ url_for('tasks.add_task') }}" class="action-btn btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>
+                    <div>
+                        <div class="fw-semibold">Nueva Tarea</div>
+                        <small>Crear una nueva tarea</small>
+                    </div>
+                </a>
+                
+                <a href="{{ url_for('events.add_event') }}" class="action-btn btn btn-success">
+                    <i class="fas fa-calendar-plus me-2"></i>
+                    <div>
+                        <div class="fw-semibold">Nuevo Evento</div>
+                        <small>Agendar un evento</small>
+                    </div>
+                </a>
+                
+                <a href="{{ url_for('tasks.urgent_tasks') }}" class="action-btn btn btn-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <div>
+                        <div class="fw-semibold">Tareas Urgentes</div>
+                        <small>Ver tareas próximas a vencer</small>
+                    </div>
+                </a>
+                
+                <a href="{{ url_for('events.upcoming_events') }}" class="action-btn btn btn-info">
+                    <i class="fas fa-calendar-week me-2"></i>
+                    <div>
+                        <div class="fw-semibold">Eventos Próximos</div>
+                        <small>Revisar próximos eventos</small>
+                    </div>
+                </a>
+                
+                {% if session.role == 'Organizador' %}
+                <a href="{{ url_for('main.admin') }}" class="action-btn btn btn-secondary">
+                    <i class="fas fa-chart-line me-2"></i>
+                    <div>
+                        <div class="fw-semibold">Panel Admin</div>
+                        <small>Estadísticas del sistema</small>
+                    </div>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="col-lg-8 mb-4">
+            <div class="calendar-widget">
+                <h4 class="section-title">
+                    <i class="fas fa-calendar me-2 text-primary"></i>
+                    Vista Rápida del Mes
+                </h4>
+                
+                <div class="row text-center mb-3">
+                    <div class="col">
+                        <small class="text-muted fw-semibold">Dom</small>
+                    </div>
+                    <div class="col">
+                        <small class="text-muted fw-semibold">Lun</small>
+                    </div>
+                    <div class="col">
+                        <small class="text-muted fw-semibold">Mar</small>
+                    </div>
+                    <div class="col">
+                        <small class="text-muted fw-semibold">Mié</small>
+                    </div>
+                    <div class="col">
+                        <small class="text-muted fw-semibold">Jue</small>
+                    </div>
+                    <div class="col">
+                        <small class="text-muted fw-semibold">Vie</small>
+                    </div>
+                    <div class="col">
+                        <small class="text-muted fw-semibold">Sáb</small>
+                    </div>
+                </div>
+                
+                <!-- Mini calendario - esto se llenará con JavaScript -->
+                <div id="mini-calendar" class="text-center">
+                    <div class="row g-1 mb-1">
+                        <div class="col"><div class="calendar-day"></div></div>
+                        <div class="col"><div class="calendar-day"></div></div>
+                        <div class="col"><div class="calendar-day"></div></div>
+                        <div class="col"><div class="calendar-day">1</div></div>
+                        <div class="col"><div class="calendar-day">2</div></div>
+                        <div class="col"><div class="calendar-day">3</div></div>
+                        <div class="col"><div class="calendar-day">4</div></div>
+                    </div>
+                    <div class="row g-1 mb-1">
+                        <div class="col"><div class="calendar-day">5</div></div>
+                        <div class="col"><div class="calendar-day">6</div></div>
+                        <div class="col"><div class="calendar-day">7</div></div>
+                        <div class="col"><div class="calendar-day">8</div></div>
+                        <div class="col"><div class="calendar-day">9</div></div>
+                        <div class="col"><div class="calendar-day">10</div></div>
+                        <div class="col"><div class="calendar-day">11</div></div>
+                    </div>
+                    <div class="row g-1 mb-1">
+                        <div class="col"><div class="calendar-day">12</div></div>
+                        <div class="col"><div class="calendar-day">13</div></div>
+                        <div class="col"><div class="calendar-day">14</div></div>
+                        <div class="col"><div class="calendar-day today">15</div></div>
+                        <div class="col"><div class="calendar-day">16</div></div>
+                        <div class="col"><div class="calendar-day has-events">17</div></div>
+                        <div class="col"><div class="calendar-day">18</div></div>
+                    </div>
+                    <div class="row g-1 mb-1">
+                        <div class="col"><div class="calendar-day">19</div></div>
+                        <div class="col"><div class="calendar-day has-events">20</div></div>
+                        <div class="col"><div class="calendar-day">21</div></div>
+                        <div class="col"><div class="calendar-day">22</div></div>
+                        <div class="col"><div class="calendar-day">23</div></div>
+                        <div class="col"><div class="calendar-day">24</div></div>
+                        <div class="col"><div class="calendar-day">25</div></div>
+                    </div>
+                    <div class="row g-1">
+                        <div class="col"><div class="calendar-day">26</div></div>
+                        <div class="col"><div class="calendar-day">27</div></div>
+                        <div class="col"><div class="calendar-day">28</div></div>
+                        <div class="col"><div class="calendar-day">29</div></div>
+                        <div class="col"><div class="calendar-day">30</div></div>
+                        <div class="col"><div class="calendar-day">31</div></div>
+                        <div class="col"><div class="calendar-day"></div></div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('events.event_calendar') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-calendar-alt me-2"></i>Ver Calendario Completo
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resumen Semanal -->
+    <div class="row">
+        <div class="col-12">
+            <div class="stats-card">
+                <h4 class="section-title">
+                    <i class="fas fa-chart-bar me-2 text-info"></i>
+                    Resumen de la Semana
+                </h4>
+                
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <div class="stats-number text-primary">{{ task_stats.total }}</div>
+                        <p class="stats-label">Tareas Totales</p>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-number text-success">{{ task_stats.completed }}</div>
+                        <p class="stats-label">Completadas</p>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-number text-warning">{{ task_stats.pending }}</div>
+                        <p class="stats-label">Pendientes</p>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-number text-info">{{ upcoming_events|length }}</div>
+                        <p class="stats-label">Eventos Próximos</p>
+                    </div>
+                </div>
+                
+                {% if task_stats.total > 0 %}
+                <div class="text-center mt-3">
+                    <p class="mb-0">
+                        <strong>Motivación del día:</strong>
+                        <span id="motivation-text">¡Sigue así, vas muy bien!</span>
+                    </p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Calcular progreso de tareas
+    const progressBar = document.getElementById('completion-progress');
+    if (progressBar) {
+        const total = parseInt(progressBar.dataset.total);
+        const completed = parseInt(progressBar.dataset.completed);
+        const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+        
+        progressBar.style.width = percentage + '%';
+        progressBar.setAttribute('aria-valuenow', percentage);
+    }
+    
+    // Calcular y mostrar productividad
+    const productivityElement = document.getElementById('productivity-percent');
+    const productivityTextElement = document.getElementById('productivity-text');
+    
+    if (productivityElement) {
+        const total = parseInt(productivityElement.dataset.total);
+        const completed = parseInt(productivityElement.dataset.completed);
+        const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+        
+        productivityElement.textContent = percentage + '%';
+        
+        // Texto de productividad
+        let productivityText = 'Crea tu primera tarea';
+        if (total > 0) {
+            if (percentage >= 80) {
+                productivityText = '¡Excelente trabajo!';
+            } else if (percentage >= 60) {
+                productivityText = '¡Buen ritmo!';
+            } else if (percentage >= 40) {
+                productivityText = 'Puedes mejorar';
+            } else {
+                productivityText = '¡Vamos, tú puedes!';
+            }
+        }
+        
+        if (productivityTextElement) {
+            productivityTextElement.textContent = productivityText;
+        }
+    }
+    
+    // Generar calendario dinámico
+    generateMiniCalendar();
+    
+    // Generar mensaje motivacional
+    generateMotivationalMessage();
+    
+    // Función para cambiar estado de tarea
+    window.toggleTaskStatus = function(taskId) {
+        if (confirm('¿Cambiar el estado de esta tarea?')) {
+            showLoading();
+            
+            fetch(`/tasks/${taskId}/toggle_status`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                hideLoading();
+                if (data.success) {
+                    location.reload(); // Recargar página para mostrar cambios
+                } else {
+                    alert('Error al cambiar el estado de la tarea');
+                }
+            })
+            .catch(error => {
+                hideLoading();
+                console.error('Error:', error);
+                alert('Error de conexión');
+            });
+        }
+    };
+    
+    // Función para generar mini calendario
+    function generateMiniCalendar() {
+        const today = new Date();
+        const currentDay = today.getDate();
+        
+        // Marcar el día actual
+        const calendarDays = document.querySelectorAll('.calendar-day');
+        calendarDays.forEach(day => {
+            const dayText = day.textContent.trim();
+            if (dayText && parseInt(dayText) === currentDay) {
+                day.classList.add('today');
+            }
+        });
+    }
+    
+    // Función para generar mensaje motivacional
+    function generateMotivationalMessage() {
+        const motivationElement = document.getElementById('motivation-text');
+        if (!motivationElement) return;
+        
+        const messages = [
+            '¡Sigue así, vas muy bien!',
+            '¡Cada tarea completada es un paso hacia el éxito!',
+            '¡Tu organización es admirable!',
+            '¡Mantén el ritmo, lo estás haciendo genial!',
+            '¡La constancia es la clave del éxito!',
+            '¡Cada día eres más productivo!',
+            '¡Tu dedicación dará frutos!'
+        ];
+        
+        const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+        motivationElement.textContent = randomMessage;
+    }
+    
+    // Actualizar estadísticas cada 30 segundos
+    setInterval(function() {
+        if (window.TASKLY && window.TASKLY.urls && window.TASKLY.urls.quickStats) {
+            fetch(window.TASKLY.urls.quickStats)
+                .then(response => response.json())
+                .then(data => {
+                    // Actualizar números si es necesario
+                    console.log('Stats updated:', data);
+                })
+                .catch(error => {
+                    console.warn('Error updating stats:', error);
+                });
+        }
+    }, 30000);
+});
+
+// Funciones auxiliares
+function showLoading() {
+    const overlay = document.getElementById('loading-overlay');
+    if (overlay) {
+        overlay.style.display = 'flex';
+    }
+}
+
+function hideLoading() {
+    const overlay = document.getElementById('loading-overlay');
+    if (overlay) {
+        overlay.style.display = 'none';
+    }
+}
+</script>
+{% endblock %}

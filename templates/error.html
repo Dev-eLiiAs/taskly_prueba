@@ -1,0 +1,607 @@
+<!-- templates/errors/error.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error {{ error_code }} - {{ app_name }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .error-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .error-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .error-code {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .error-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        
+        .error-message {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .error-actions {
+            margin: 2rem 0;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin: 0.5rem;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin: 0.5rem;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .error-details {
+            background: #f8f9fa;
+            border-left: 4px solid var(--error-color, #dc3545);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 10px 10px 0;
+            text-align: left;
+        }
+        
+        .error-details h5 {
+            color: var(--error-color, #dc3545);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .error-details code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #e83e8c;
+            word-break: break-all;
+        }
+        
+        .error-details pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            margin: 1rem 0;
+        }
+        
+        .helpful-links {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .helpful-links h6 {
+            color: #495057;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .helpful-links a {
+            color: #667eea;
+            text-decoration: none;
+            margin: 0 1rem 0.5rem 0;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            background: rgba(102, 126, 234, 0.1);
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .helpful-links a:hover {
+            background: rgba(102, 126, 234, 0.2);
+            color: #764ba2;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+        
+        .error-timestamp {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e9ecef;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        /* Colores específicos por tipo de error */
+        .error-404 { --error-color: #ffc107; }
+        .error-403 { --error-color: #fd7e14; }
+        .error-500 { --error-color: #dc3545; }
+        .error-template { --error-color: #e83e8c; }
+        .error-default { --error-color: #6f42c1; }
+        
+        /* Iconos específicos */
+        .icon-404 { color: #ffc107; }
+        .icon-403 { color: #fd7e14; }
+        .icon-500 { color: #dc3545; }
+        .icon-template { color: #e83e8c; }
+        .icon-default { color: #6f42c1; }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .error-container {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+            
+            .error-code {
+                font-size: 2.5rem;
+            }
+            
+            .error-title {
+                font-size: 1.4rem;
+            }
+            
+            .error-message {
+                font-size: 1rem;
+            }
+            
+            .btn-primary, .btn-secondary {
+                padding: 10px 20px;
+                margin: 0.25rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body data-debug="{% if app.debug %}true{% else %}false{% endif %}" 
+      data-error-code="{{ error_code }}" 
+      data-error-type="{{ error_type }}" 
+      data-error-id="{{ error_id }}">
+    <div class="container">
+        <div class="error-container error-{{ error_type }}">
+            <!-- Icono del error -->
+            <div class="error-icon icon-{{ error_type }}">
+                {% if error_type == '404' %}
+                    <i class="bi bi-compass"></i>
+                {% elif error_type == '403' %}
+                    <i class="bi bi-shield-exclamation"></i>
+                {% elif error_type == '500' %}
+                    <i class="bi bi-exclamation-triangle"></i>
+                {% elif error_type == 'template' %}
+                    <i class="bi bi-file-earmark-x"></i>
+                {% else %}
+                    <i class="bi bi-bug"></i>
+                {% endif %}
+            </div>
+            
+            <!-- Código del error -->
+            <div class="error-code">
+                {% if error_code %}
+                    {{ error_code }}
+                {% else %}
+                    Error
+                {% endif %}
+            </div>
+            
+            <!-- Título del error -->
+            <div class="error-title">
+                {{ error_title }}
+            </div>
+            
+            <!-- Mensaje del error -->
+            <div class="error-message">
+                {{ error_description }}
+            </div>
+            
+            <!-- Acciones principales -->
+            <div class="error-actions">
+                <a href="{{ url_for('main.dashboard') if 'main.dashboard' in app.view_functions else '/' }}" class="btn-primary">
+                    <i class="bi bi-house-door"></i> Ir al Dashboard
+                </a>
+                <a href="javascript:history.back()" class="btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Volver atrás
+                </a>
+                {% if request.referrer and request.referrer != request.url %}
+                <a href="{{ request.referrer }}" class="btn-secondary">
+                    <i class="bi bi-arrow-counterclockwise"></i> Página anterior
+                </a>
+                {% endif %}
+            </div>
+            
+            <!-- Detalles técnicos (solo en modo debug) -->
+            {% if app.debug and (technical_details or error_traceback) %}
+            <div class="error-details">
+                <h5>
+                    <i class="bi bi-code-slash"></i>
+                    Información técnica (modo desarrollo)
+                </h5>
+                
+                {% if technical_details %}
+                    {% for key, value in technical_details.items() %}
+                    <p><strong>{{ key }}:</strong> 
+                        {% if value is string and value|length > 100 %}
+                            <code>{{ value[:100] }}...</code>
+                        {% else %}
+                            <code>{{ value }}</code>
+                        {% endif %}
+                    </p>
+                    {% endfor %}
+                {% endif %}
+                
+                {% if error_traceback %}
+                <p><strong>Traceback:</strong></p>
+                <pre>{{ error_traceback }}</pre>
+                {% endif %}
+                
+                <p><strong>URL solicitada:</strong> <code>{{ request.url }}</code></p>
+                <p><strong>Método:</strong> <code>{{ request.method }}</code></p>
+                <p><strong>User Agent:</strong> <code>{{ request.headers.get('User-Agent', 'No disponible')[:100] }}</code></p>
+                {% if session.get('user_id') %}
+                <p><strong>Usuario:</strong> <code>{{ session.get('username', 'N/A') }} (ID: {{ session.get('user_id') }})</code></p>
+                {% endif %}
+            </div>
+            {% endif %}
+            
+            <!-- Enlaces útiles -->
+            <div class="helpful-links">
+                <h6>¿Necesitas ayuda? Prueba estos enlaces:</h6>
+                
+                {% if current_user %}
+                    <a href="{{ url_for('tasks.list_tasks') if 'tasks.list_tasks' in app.view_functions else '#' }}">
+                        <i class="bi bi-list-task"></i> Mis Tareas
+                    </a>
+                    <a href="{{ url_for('events.list_events') if 'events.list_events' in app.view_functions else '#' }}">
+                        <i class="bi bi-calendar-event"></i> Mis Eventos
+                    </a>
+                    {% if is_organizer %}
+                    <a href="{{ url_for('main.admin') if 'main.admin' in app.view_functions else '#' }}">
+                        <i class="bi bi-gear"></i> Administración
+                    </a>
+                    {% endif %}
+                {% else %}
+                    <a href="{{ url_for('auth.login') if 'auth.login' in app.view_functions else '#' }}">
+                        <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                    </a>
+                    <a href="{{ url_for('auth.register') if 'auth.register' in app.view_functions else '#' }}">
+                        <i class="bi bi-person-plus"></i> Registrarse
+                    </a>
+                {% endif %}
+                
+                <a href="{{ url_for('api.health') if 'api.health' in app.view_functions else '#' }}">
+                    <i class="bi bi-activity"></i> Estado del Sistema
+                </a>
+            </div>
+            
+            <!-- Timestamp -->
+            <div class="error-timestamp">
+                <i class="bi bi-clock"></i> 
+                {{ now.strftime('%d/%m/%Y %H:%M:%S') }}
+                {% if error_id %}
+                    | ID del Error: <code>{{ error_id }}</code>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Script para reportar errores automáticamente -->
+<script>
+    // Obtener datos desde data attributes del body
+    const body = document.body;
+    const isDebugMode = body.getAttribute('data-debug') === 'true';
+    const errorCode = body.getAttribute('data-error-code');
+    const errorType = body.getAttribute('data-error-type');
+    const errorId = body.getAttribute('data-error-id');
+    
+    // Función para determinar si es un error crítico
+    function isCriticalError(code) {
+        // Si es un número y es >= 500
+        const numCode = parseInt(code);
+        if (!isNaN(numCode) && numCode >= 500) {
+            return true;
+        }
+        
+        // Si es uno de estos tipos de error críticos
+        const criticalTypes = ['Template', 'default', 'template'];
+        return criticalTypes.includes(code);
+    }
+    
+    // Función para reportar errores automáticamente
+    function reportError() {
+        // Solo reportar si:
+        // 1. No estamos en modo debug
+        // 2. Es un error crítico
+        // 3. Hay un error code
+        if (isDebugMode || !errorCode || !isCriticalError(errorCode)) {
+            return;
+        }
+        
+        console.log('Reportando error crítico:', errorCode);
+        
+        fetch('/api/error-report', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                error_code: errorCode,
+                error_type: errorType,
+                url: window.location.href,
+                user_agent: navigator.userAgent,
+                timestamp: new Date().toISOString(),
+                error_id: errorId,
+                referrer: document.referrer || 'Direct access'
+            })
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('Error reportado exitosamente');
+            }
+        })
+        .catch(error => {
+            console.log('No se pudo reportar el error:', error);
+            // Intentar método alternativo si está disponible
+            if (navigator.sendBeacon) {
+                const data = new FormData();
+                data.append('error_code', errorCode);
+                data.append('error_type', errorType);
+                data.append('url', window.location.href);
+                data.append('timestamp', new Date().toISOString());
+                navigator.sendBeacon('/api/error-report-beacon', data);
+            }
+        });
+    }
+    
+    // Esperar un momento antes de reportar para asegurar que la página se cargó
+    setTimeout(reportError, 1000);
+    
+    // También reportar si el usuario abandona la página (para errores críticos)
+    if (!isDebugMode && errorCode && isCriticalError(errorCode)) {
+        window.addEventListener('beforeunload', function() {
+            if (navigator.sendBeacon) {
+                const data = new FormData();
+                data.append('error_code', errorCode);
+                data.append('error_type', errorType);
+                data.append('url', window.location.href);
+                data.append('timestamp', new Date().toISOString());
+                data.append('session_end', 'true');
+                navigator.sendBeacon('/api/error-report-beacon', data);
+            }
+        });
+    }
+    
+    // Funciones adicionales para mejorar la experiencia
+    
+    // Auto-reload para errores temporales (500) después de un tiempo
+    if (errorCode === '500' && !isDebugMode) {
+        let countdown = 30;
+        const reloadBtn = document.createElement('button');
+        reloadBtn.className = 'btn-secondary';
+        reloadBtn.innerHTML = `<i class="bi bi-arrow-clockwise"></i> Recargar automáticamente en ${countdown}s`;
+        reloadBtn.style.marginTop = '1rem';
+        
+        const actions = document.querySelector('.error-actions');
+        if (actions) {
+            actions.appendChild(reloadBtn);
+        }
+        
+        const timer = setInterval(() => {
+            countdown--;
+            reloadBtn.innerHTML = `<i class="bi bi-arrow-clockwise"></i> Recargar automáticamente en ${countdown}s`;
+            
+            if (countdown <= 0) {
+                clearInterval(timer);
+                window.location.reload();
+            }
+        }, 1000);
+        
+        // Permitir cancelar el auto-reload
+        reloadBtn.addEventListener('click', () => {
+            clearInterval(timer);
+            window.location.reload();
+        });
+    }
+    
+    // Mostrar consejos específicos según el tipo de error
+    function showErrorTips() {
+        const tipsContainer = document.createElement('div');
+        tipsContainer.className = 'error-tips mt-3 p-3 bg-light rounded';
+        tipsContainer.style.textAlign = 'left';
+        
+        let tips = '';
+        
+        switch(errorCode) {
+            case '404':
+                tips = `
+                    <h6><i class="bi bi-lightbulb"></i> Consejos:</h6>
+                    <ul>
+                        <li>Verifica que la URL esté escrita correctamente</li>
+                        <li>La página puede haber sido movida o eliminada</li>
+                        <li>Intenta buscar el contenido desde el menú principal</li>
+                    </ul>
+                `;
+                break;
+            case '403':
+                tips = `
+                    <h6><i class="bi bi-lightbulb"></i> Consejos:</h6>
+                    <ul>
+                        <li>Asegúrate de haber iniciado sesión</li>
+                        <li>Verifica que tengas los permisos necesarios</li>
+                        <li>Contacta al administrador si crees que es un error</li>
+                    </ul>
+                `;
+                break;
+            case '500':
+                tips = `
+                    <h6><i class="bi bi-lightbulb"></i> Consejos:</h6>
+                    <ul>
+                        <li>Este es un error temporal del servidor</li>
+                        <li>Intenta recargar la página en unos minutos</li>
+                        <li>Si persiste, contacta al soporte técnico</li>
+                    </ul>
+                `;
+                break;
+            default:
+                if (isCriticalError(errorCode)) {
+                    tips = `
+                        <h6><i class="bi bi-lightbulb"></i> Consejos:</h6>
+                        <ul>
+                            <li>Ha ocurrido un error técnico inesperado</li>
+                            <li>Nuestro equipo ha sido notificado automáticamente</li>
+                            <li>Intenta realizar la acción nuevamente más tarde</li>
+                        </ul>
+                    `;
+                }
+                break;
+        }
+        
+        if (tips) {
+            tipsContainer.innerHTML = tips;
+            const errorContainer = document.querySelector('.error-container');
+            const helpfulLinks = document.querySelector('.helpful-links');
+            if (errorContainer && helpfulLinks) {
+                errorContainer.insertBefore(tipsContainer, helpfulLinks);
+            }
+        }
+    }
+    
+    // Mostrar consejos después de cargar la página
+    setTimeout(showErrorTips, 500);
+    
+    // Funcionalidad para copiar información del error (útil para reportes)
+    function addCopyErrorInfo() {
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'btn-secondary';
+        copyBtn.innerHTML = '<i class="bi bi-clipboard"></i> Copiar info del error';
+        copyBtn.style.fontSize = '0.9rem';
+        
+        copyBtn.addEventListener('click', async () => {
+            const errorInfo = `
+Error Code: ${errorCode}
+Error Type: ${errorType}
+Error ID: ${errorId}
+URL: ${window.location.href}
+Timestamp: ${new Date().toISOString()}
+User Agent: ${navigator.userAgent}
+Referrer: ${document.referrer || 'Direct access'}
+            `.trim();
+            
+            try {
+                await navigator.clipboard.writeText(errorInfo);
+                copyBtn.innerHTML = '<i class="bi bi-check"></i> ¡Copiado!';
+                copyBtn.style.background = '#28a745';
+                setTimeout(() => {
+                    copyBtn.innerHTML = '<i class="bi bi-clipboard"></i> Copiar info del error';
+                    copyBtn.style.background = '';
+                }, 2000);
+            } catch (err) {
+                console.log('No se pudo copiar:', err);
+                // Fallback para navegadores que no soportan clipboard API
+                const textArea = document.createElement('textarea');
+                textArea.value = errorInfo;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    copyBtn.innerHTML = '<i class="bi bi-check"></i> ¡Copiado!';
+                } catch (copyErr) {
+                    copyBtn.innerHTML = '<i class="bi bi-x"></i> Error al copiar';
+                }
+                document.body.removeChild(textArea);
+            }
+        });
+        
+        const actions = document.querySelector('.error-actions');
+        if (actions) {
+            actions.appendChild(copyBtn);
+        }
+    }
+    
+    // Agregar botón de copiar solo en modo debug o errores críticos
+    if (isDebugMode || isCriticalError(errorCode)) {
+        setTimeout(addCopyErrorInfo, 1000);
+    }
+    
+    console.log('Error Page Loaded:', {
+        code: errorCode,
+        type: errorType,
+        debug: isDebugMode,
+        critical: isCriticalError(errorCode)
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,441 @@
+{% extends "base.html" %}
+
+{% block title %}Iniciar Sesión - Taskly{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Inter', sans-serif;
+    }
+    
+    .login-container {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        padding: 3rem;
+        width: 100%;
+        max-width: 450px;
+        margin: 2rem;
+    }
+    
+    .login-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .login-header h1 {
+        color: #2c3e50;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .login-header p {
+        color: #7f8c8d;
+        margin-bottom: 0;
+    }
+    
+    .brand-logo {
+        font-size: 3rem;
+        color: #667eea;
+        margin-bottom: 1rem;
+    }
+    
+    .form-floating {
+        margin-bottom: 1rem;
+    }
+    
+    .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        padding: 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+    
+    .btn-login {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 10px;
+        padding: 1rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        width: 100%;
+        margin-top: 1rem;
+    }
+    
+    .btn-login:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-login:disabled {
+        background: #6c757d;
+        transform: none;
+        box-shadow: none;
+        cursor: not-allowed;
+    }
+    
+    .form-check {
+        margin: 1rem 0;
+    }
+    
+    .form-check-input:checked {
+        background-color: #667eea;
+        border-color: #667eea;
+    }
+    
+    .login-footer {
+        text-align: center;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    .demo-accounts {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 1rem;
+        margin-top: 1.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .demo-accounts strong {
+        color: #495057;
+    }
+    
+    .demo-account {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #dee2e6;
+    }
+    
+    .demo-account:last-child {
+        border-bottom: none;
+    }
+    
+    .btn-demo {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 5px;
+    }
+    
+    .loading-spinner {
+        display: none;
+    }
+    
+    .input-group-text {
+        background: transparent;
+        border: 2px solid #e9ecef;
+        border-right: none;
+        border-radius: 10px 0 0 10px;
+    }
+    
+    .password-toggle {
+        background: transparent;
+        border: 2px solid #e9ecef;
+        border-left: none;
+        border-radius: 0 10px 10px 0;
+        cursor: pointer;
+    }
+    
+    .password-toggle:hover {
+        background: #f8f9fa;
+    }
+    
+    @media (max-width: 576px) {
+        .login-container {
+            margin: 1rem;
+            padding: 2rem;
+        }
+        
+        .brand-logo {
+            font-size: 2.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <!-- Header -->
+    <div class="login-header">
+        <div class="brand-logo">
+            <i class="fas fa-tasks"></i>
+        </div>
+        <h1>Bienvenido a Taskly</h1>
+        <p>Inicia sesión para gestionar tus tareas y eventos</p>
+    </div>
+    
+    <!-- Login Form -->
+    <form method="POST" id="loginForm" novalidate>
+        <!-- Username Field -->
+        <div class="form-floating">
+            <input type="text" 
+                   class="form-control" 
+                   id="username" 
+                   name="username" 
+                   placeholder="Usuario"
+                   value="{{ request.form.username if request.form.username else '' }}"
+                   required
+                   autocomplete="username">
+            <label for="username">
+                <i class="fas fa-user me-2"></i>Usuario
+            </label>
+            <div class="invalid-feedback">
+                Por favor ingresa tu nombre de usuario
+            </div>
+        </div>
+        
+        <!-- Password Field -->
+        <div class="form-floating">
+            <div class="input-group">
+                <input type="password" 
+                       class="form-control" 
+                       id="password" 
+                       name="password" 
+                       placeholder="Contraseña"
+                       required
+                       autocomplete="current-password">
+                <button class="btn password-toggle" 
+                        type="button" 
+                        id="togglePassword"
+                        aria-label="Mostrar contraseña">
+                    <i class="fas fa-eye"></i>
+                </button>
+            </div>
+            <label for="password">
+                <i class="fas fa-lock me-2"></i>Contraseña
+            </label>
+            <div class="invalid-feedback">
+                Por favor ingresa tu contraseña
+            </div>
+        </div>
+        
+        <!-- Remember Me -->
+        <div class="form-check">
+            <input class="form-check-input" 
+                   type="checkbox" 
+                   id="rememberMe" 
+                   name="remember_me">
+            <label class="form-check-label" for="rememberMe">
+                Recordar mi sesión
+            </label>
+        </div>
+        
+        <!-- Submit Button -->
+        <button type="submit" 
+                class="btn btn-primary btn-login" 
+                id="loginBtn">
+            <span class="login-text">
+                <i class="fas fa-sign-in-alt me-2"></i>
+                Iniciar Sesión
+            </span>
+            <span class="loading-spinner">
+                <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                Iniciando sesión...
+            </span>
+        </button>
+    </form>
+    
+    <!-- Demo Accounts -->
+    <div class="demo-accounts">
+        <strong><i class="fas fa-info-circle me-2"></i>Cuentas de Demostración:</strong>
+        
+        <div class="demo-account">
+            <div>
+                <div><strong>Organizador:</strong> admin / admin123</div>
+                <small class="text-muted">Acceso completo al sistema</small>
+            </div>
+            <button type="button" 
+                    class="btn btn-outline-primary btn-demo"
+                    onclick="fillDemoCredentials('admin', 'admin123')">
+                Usar
+            </button>
+        </div>
+        
+        <div class="demo-account">
+            <div>
+                <div><strong>Participante:</strong> user1 / user123</div>
+                <small class="text-muted">Acceso limitado</small>
+            </div>
+            <button type="button" 
+                    class="btn btn-outline-secondary btn-demo"
+                    onclick="fillDemoCredentials('user1', 'user123')">
+                Usar
+            </button>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="login-footer">
+        <p class="mb-2">
+            <a href="{{ url_for('auth.register') }}" class="text-decoration-none">
+                <i class="fas fa-user-plus me-1"></i>¿No tienes cuenta? Regístrate
+            </a>
+        </p>
+        
+        <p class="mb-0">
+            <a href="{{ url_for('main.about') }}" class="text-muted text-decoration-none">
+                <i class="fas fa-info-circle me-1"></i>Acerca de Taskly
+            </a>
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    const usernameField = $('#username');
+    const passwordField = $('#password');
+    const loginBtn = $('#loginBtn');
+    const loginForm = $('#loginForm');
+    
+    // Validate fields and enable/disable button
+    function validateFields() {
+        const username = usernameField.val().trim();
+        const password = passwordField.val().trim();
+        
+        if (username && password) {
+            loginBtn.prop('disabled', false);
+        } else {
+            loginBtn.prop('disabled', true);
+        }
+    }
+    
+    // Real-time validation
+    usernameField.on('input', validateFields);
+    passwordField.on('input', validateFields);
+    
+    // Initial validation
+    validateFields();
+    
+    // Password toggle functionality
+    $('#togglePassword').click(function() {
+        const password = $('#password');
+        const icon = $(this).find('i');
+        
+        if (password.attr('type') === 'password') {
+            password.attr('type', 'text');
+            icon.removeClass('fa-eye').addClass('fa-eye-slash');
+            $(this).attr('aria-label', 'Ocultar contraseña');
+        } else {
+            password.attr('type', 'password');
+            icon.removeClass('fa-eye-slash').addClass('fa-eye');
+            $(this).attr('aria-label', 'Mostrar contraseña');
+        }
+    });
+    
+    // Form submission with loading state
+    loginForm.submit(function(e) {
+        if (!loginForm[0].checkValidity()) {
+            e.preventDefault();
+            e.stopPropagation();
+            loginForm.addClass('was-validated');
+            return;
+        }
+        
+        // Show loading state
+        const loginText = $('.login-text');
+        const loadingSpinner = $('.loading-spinner');
+        
+        loginBtn.prop('disabled', true);
+        loginText.hide();
+        loadingSpinner.show();
+        
+        // Show loading overlay
+        showLoading();
+    });
+    
+    // Focus on username field
+    usernameField.focus();
+    
+    // Handle Enter key
+    passwordField.keypress(function(e) {
+        if (e.which === 13 && !loginBtn.prop('disabled')) {
+            loginForm.submit();
+        }
+    });
+    
+    // Clear validation on input
+    $('.form-control').on('input', function() {
+        $(this).removeClass('is-invalid');
+        loginForm.removeClass('was-validated');
+    });
+});
+
+// Fill demo credentials function
+function fillDemoCredentials(username, password) {
+    $('#username').val(username);
+    $('#password').val(password);
+    
+    // Trigger validation
+    $('#username').trigger('input');
+    $('#password').trigger('input');
+    
+    // Focus on login button
+    $('#loginBtn').focus();
+    
+    // Show a tooltip or highlight
+    const btn = event.target;
+    $(btn).text('¡Listo!').addClass('btn-success');
+    setTimeout(() => {
+        $(btn).text('Usar').removeClass('btn-success').addClass('btn-outline-primary');
+    }, 1000);
+}
+
+// Show loading function (if not defined in base.html)
+function showLoading() {
+    // This should be defined in base.html, but as fallback:
+    console.log('Loading...');
+}
+
+// Keyboard shortcuts
+$(document).keydown(function(e) {
+    // Alt + D = Demo admin account
+    if (e.altKey && e.which === 68) {
+        e.preventDefault();
+        fillDemoCredentials('admin', 'admin123');
+    }
+    
+    // Alt + U = Demo user account  
+    if (e.altKey && e.which === 85) {
+        e.preventDefault();
+        fillDemoCredentials('user1', 'user123');
+    }
+});
+
+// Auto-fill from localStorage (remember me functionality)
+$(document).ready(function() {
+    const rememberedUsername = localStorage.getItem('taskly_username');
+    if (rememberedUsername && !$('#username').val()) {
+        $('#username').val(rememberedUsername);
+        $('#rememberMe').prop('checked', true);
+        $('#password').focus();
+    }
+    
+    // Save username when form is submitted with remember me checked
+    $('#loginForm').submit(function() {
+        if ($('#rememberMe').is(':checked')) {
+            localStorage.setItem('taskly_username', $('#username').val());
+        } else {
+            localStorage.removeItem('taskly_username');
+        }
+    });
+});
+</script>
+{% endblock %}
