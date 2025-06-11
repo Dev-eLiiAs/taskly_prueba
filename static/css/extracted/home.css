@@ -56,7 +56,7 @@
         font-size: 1.25rem;
         font-weight: 600;
         margin-bottom: 1rem;
-        color: #2c3e50;}
+        color: #0c497e;}
 
 .task-item, .event-item {
         background: white;
@@ -177,6 +177,7 @@
 70% { box-shadow: 0 0 0 10px rgba(255, 107, 107, 0);}
 
 100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0);}
+}
 
 .empty-state {
         text-align: center;
@@ -190,10 +191,14 @@
 
 @media (max-width: 768px) {
         .welcome-text {
-            font-size: 2rem;}
+                font-size: 2rem;
+        }
 
-.stats-card {
-            margin-bottom: 1rem;}
+        .stats-card {
+                margin-bottom: 1rem;
+        }
 
-.dashboard-header {
-            padding: 1.5rem 0;}
+        .dashboard-header {
+                padding: 1.5rem 0;
+        }
+}

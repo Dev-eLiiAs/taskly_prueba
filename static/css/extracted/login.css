@@ -128,8 +128,11 @@ body {
 
 @media (max-width: 576px) {
         .login-container {
-            margin: 1rem;
-            padding: 2rem;}
+                margin: 1rem;
+                padding: 2rem;
+        }
 
-.brand-logo {
-            font-size: 2.5rem;}
+        .brand-logo {
+                font-size: 2.5rem;
+        }
+}

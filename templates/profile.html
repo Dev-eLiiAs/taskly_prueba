@@ -3,651 +3,145 @@
 {% block title %}Mi Perfil - Taskly{% endblock %}
 
 {% block extra_css %}
-
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
 {% endblock %}
 
 <!-- Datos del usuario para JavaScript -->
 <script id="user-profile-data" type="application/json">
 {
-    "username": "{{ session.username|e }}",
-    "full_name": "{{ session.full_name|e }}",
-    "email": "{{ session.get('email', '')|e }}",
-    "role": "{{ session.role|e }}",
-    "stats": {
-        "total_tasks": {{ stats.total_tasks }},
-        "completed_tasks": {{ stats.completed_tasks }},
-        "total_events": {{ stats.total_events }}
-    }
+  "username": "{{ session.username|e }}",
+  "full_name": "{{ session.full_name|e }}",
+  "email": "{{ session.get('email', '')|e }}",
+  "role": "{{ session.role|e }}",
+  "stats": {
+    "total_tasks": {{ stats.total_tasks }},
+    "completed_tasks": {{ stats.completed_tasks }},
+    "total_events": {{ stats.total_events }}
+  }
 }
 </script>
 
 {% block content %}
 <div class="profile-header">
-<div class="container">
-<div class="row align-items-center">
-<div class="col-md-8">
-<h1 class="mb-1">
-<i class="fas fa-user-circle me-2"></i>
-                    Mi Perfil
-                </h1>
-<p class="mb-0 opacity-75">
-                    Gestiona tu información personal y preferencias
-                </p>
-</div>
-<div class="col-md-4 text-md-end">
-<div class="d-flex gap-2 justify-content-md-end justify-content-center mt-3 mt-md-0">
-<button class="btn btn-light" onclick="toggleEditMode()" type="button">
-<i class="fas fa-edit me-1"></i>Editar Perfil
-                    </button>
-<a class="btn btn-outline-light" href="{{ url_for('auth.change_password') }}">
-<i class="fas fa-key me-1"></i>Cambiar Contraseña
-                    </a>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="container">
-<div class="row">
-<!-- Información del Perfil -->
-<div class="col-lg-4">
-<div class="profile-container">
-<!-- Avatar -->
-<div class="profile-avatar">
-                    {% set first_letter = session.full_name[0].upper() if session.full_name else 'U' %}
-                    {{ first_letter }}
-                </div>
-<!-- Vista de Información -->
-<div class="profile-view" id="profileView">
-<div class="profile-info">
-<h3 class="profile-name">{{ session.full_name }}</h3>
-<div class="profile-role">{{ session.role }}</div>
-<p class="text-muted">{{ session.get('email', '') }}</p>
-<p class="text-muted">
-<i class="fas fa-user me-1"></i>
-                            @{{ session.username }}
-                        </p>
-</div>
-</div>
-<!-- Formulario de Edición -->
-<div class="edit-form" id="editForm">
-<form action="{{ url_for('auth.profile_update') }}" method="POST">
-<div class="mb-3">
-<label class="form-label" for="full_name">Nombre Completo</label>
-<input class="form-control" id="full_name" name="full_name" required="" type="text" value="{{ session.full_name }}"/>
-</div>
-<div class="mb-3">
-<label class="form-label" for="email">Correo Electrónico</label>
-<input class="form-control" id="email" name="email" required="" type="email" value="{{ session.get('email', '') }}"/>
-</div>
-<div class="mb-3">
-<label class="form-label" for="password_confirm">Confirmar con Contraseña</label>
-<input class="form-control" id="password_confirm" name="password" placeholder="Tu contraseña actual" required="" type="password"/>
-<div class="form-text">Confirma tu contraseña para guardar los cambios</div>
-</div>
-<div class="d-grid gap-2">
-<button class="btn btn-edit" type="submit">
-<i class="fas fa-save me-2"></i>Guardar Cambios
-                            </button>
-<button class="btn btn-outline-secondary" onclick="toggleEditMode()" type="button">
-<i class="fas fa-times me-2"></i>Cancelar
-                            </button>
-</div>
-</form>
-</div>
-<!-- Logros/Insignias -->
-<div class="mt-3">
-<h6 class="mb-2">
-<i class="fas fa-trophy me-2 text-warning"></i>
-                        Logros
-                    </h6>
-                    {% if stats.completed_tasks >= 10 %}
-                        <span class="achievement-badge">
-<i class="fas fa-star me-1"></i>Productivo
-                        </span>
-                    {% endif %}
-                    {% if stats.total_events >= 5 %}
-                        <span class="achievement-badge">
-<i class="fas fa-calendar me-1"></i>Organizador
-                        </span>
-                    {% endif %}
-                    {% if session.role == 'Organizador' %}
-                        <span class="achievement-badge">
-<i class="fas fa-crown me-1"></i>Líder
-                        </span>
-                    {% endif %}
-                </div>
-</div>
-<!-- Estadísticas Rápidas -->
-<div class="profile-stats">
-<h6 class="mb-3">
-<i class="fas fa-chart-line me-2"></i>
-                    Mis Estadísticas
-                </h6>
-<div class="row">
-<div class="col-6">
-<div class="stat-item">
-<div class="stat-number text-primary">{{ stats.total_tasks }}</div>
-<p class="stat-label">Tareas Totales</p>
-</div>
-</div>
-<div class="col-6">
-<div class="stat-item">
-<div class="stat-number text-success">{{ stats.completed_tasks }}</div>
-<p class="stat-label">Completadas</p>
-</div>
-</div>
-<div class="col-6">
-<div class="stat-item">
-<div class="stat-number text-info">{{ stats.total_events }}</div>
-<p class="stat-label">Eventos</p>
-</div>
-</div>
-<div class="col-6">
-<div class="stat-item">
-                            {% if stats.total_tasks > 0 %}
-                                {% set productivity = (stats.completed_tasks / stats.total_tasks * 100) | round(0) | int %}
-                            {% else %}
-                                {% set productivity = 0 %}
-                            {% endif %}
-                            <div class="stat-number text-warning">{{ productivity }}%</div>
-<p class="stat-label">Productividad</p>
-</div>
-</div>
-</div>
-<!-- Progreso de Productividad -->
-<div class="progress-container">
-<div class="progress-label">
-<span>Progreso del Mes</span>
-<span>{{ productivity }}%</span>
-</div>
-<div class="progress">
-<div class="progress-bar bg-gradient-success" data-completed="{{ stats.completed_tasks }}" data-total="{{ stats.total_tasks }}" id="productivity-bar">
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- Detalles e Información Adicional -->
-<div class="col-lg-8">
-<!-- Información de Cuenta -->
-<div class="profile-section">
-<h4 class="section-title">
-<i class="fas fa-info-circle text-primary"></i>
-                    Información de Cuenta
-                </h4>
-<div class="info-item">
-<span class="info-label">
-<i class="fas fa-user me-2"></i>
-                        Nombre de Usuario
-                    </span>
-<span class="info-value">{{ session.username }}</span>
-</div>
-<div class="info-item">
-<span class="info-label">
-<i class="fas fa-envelope me-2"></i>
-                        Correo Electrónico
-                    </span>
-<span class="info-value">{{ session.get('email', 'No configurado') }}</span>
-</div>
-<div class="info-item">
-<span class="info-label">
-<i class="fas fa-shield-alt me-2"></i>
-                        Rol en el Sistema
-                    </span>
-<span class="info-value">
-                        {{ session.role }}
-                        {% if session.role == 'Organizador' %}
-                            <i class="fas fa-crown text-warning ms-2"></i>
-                        {% endif %}
-                    </span>
-</div>
-<div class="info-item">
-<span class="info-label">
-<i class="fas fa-calendar-plus me-2"></i>
-                        Miembro Desde
-                    </span>
-<span class="info-value">{{ stats.member_since }}</span>
-</div>
-</div>
-<!-- Actividad Reciente -->
-<div class="profile-section">
-<h4 class="section-title">
-<i class="fas fa-history text-success"></i>
-                    Actividad Reciente
-                </h4>
-<div class="activity-item">
-<div class="activity-icon">
-<i class="fas fa-sign-in-alt"></i>
-</div>
-<div class="activity-content">
-<div class="activity-title">Último inicio de sesión</div>
-<div class="activity-desc">Sesión iniciada correctamente</div>
-<div class="activity-time">Hoy</div>
-</div>
-</div>
-                
-                {% if stats.completed_tasks > 0 %}
-                <div class="activity-item">
-<div class="activity-icon bg-primary">
-<i class="fas fa-check"></i>
-</div>
-<div class="activity-content">
-<div class="activity-title">Tareas completadas</div>
-<div class="activity-desc">Has completado {{ stats.completed_tasks }} tareas</div>
-<div class="activity-time">Esta semana</div>
-</div>
-</div>
-                {% endif %}
-                
-                {% if stats.total_events > 0 %}
-                <div class="activity-item">
-<div class="activity-icon bg-info">
-<i class="fas fa-calendar"></i>
-</div>
-<div class="activity-content">
-<div class="activity-title">Eventos creados</div>
-<div class="activity-desc">Has creado {{ stats.total_events }} eventos</div>
-<div class="activity-time">Este mes</div>
-</div>
-</div>
-                {% endif %}
-                
-                <div class="activity-item">
-<div class="activity-icon bg-warning">
-<i class="fas fa-user-edit"></i>
-</div>
-<div class="activity-content">
-<div class="activity-title">Perfil actualizado</div>
-<div class="activity-desc">Información del perfil revisada</div>
-<div class="activity-time">Ahora</div>
-</div>
-</div>
-</div>
-</div>
-<!-- Preferencias y Configuración -->
-<div class="profile-section">
-<h4 class="section-title">
-<i class="fas fa-cog text-secondary"></i>
-                    Preferencias
-                </h4>
-<div class="row">
-<div class="col-md-6">
-<div class="info-item">
-<span class="info-label">
-<i class="fas fa-bell me-2"></i>
-                                Notificaciones
-                            </span>
-<div class="form-check form-switch">
-<input checked="" class="form-check-input" id="notifications" type="checkbox"/>
-<label class="form-check-label" for="notifications">Activadas</label>
-</div>
-</div>
-</div>
-<div class="col-md-6">
-<div class="info-item">
-<span class="info-label">
-<i class="fas fa-moon me-2"></i>
-                                Tema Oscuro
-                            </span>
-<div class="form-check form-switch">
-<input class="form-check-input" id="darkMode" type="checkbox"/>
-<label class="form-check-label" for="darkMode">Desactivado</label>
-</div>
-</div>
-</div>
-<div class="col-md-6">
-<div class="info-item">
-<span class="info-label">
-<i class="fas fa-language me-2"></i>
-                                Idioma
-                            </span>
-<select class="form-select form-select-sm">
-<option selected="">Español</option>
-<option>English</option>
-<option>Français</option>
-</select>
-</div>
-</div>
-<div class="col-md-6">
-<div class="info-item">
-<span class="info-label">
-<i class="fas fa-clock me-2"></i>
-                                Zona Horaria
-                            </span>
-<select class="form-select form-select-sm">
-<option selected="">GMT-5 (Bogotá)</option>
-<option>GMT-6 (México)</option>
-<option>GMT-3 (Buenos Aires)</option>
-<option>GMT+1 (Madrid)</option>
-</select>
-</div>
-</div>
-</div>
-</div>
-<!-- Acciones de Cuenta -->
-<div class="profile-section">
-<h4 class="section-title">
-<i class="fas fa-user-cog text-danger"></i>
-                    Gestión de Cuenta
-                </h4>
-<div class="row">
-<div class="col-md-6 mb-3">
-<div class="d-grid">
-<a class="btn btn-outline-primary" href="{{ url_for('auth.change_password') }}">
-<i class="fas fa-key me-2"></i>
-                                Cambiar Contraseña
-                            </a>
-</div>
-</div>
-<div class="col-md-6 mb-3">
-<div class="d-grid">
-<button class="btn btn-outline-info" onclick="exportUserData()" type="button">
-<i class="fas fa-download me-2"></i>
-                                Exportar Mis Datos
-                            </button>
-</div>
-</div>
-<div class="col-md-6 mb-3">
-<div class="d-grid">
-<button class="btn btn-outline-warning" onclick="clearUserData()" type="button">
-<i class="fas fa-trash-restore me-2"></i>
-                                Limpiar Datos
-                            </button>
-</div>
-</div>
-<div class="col-md-6 mb-3">
-<div class="d-grid">
-<button class="btn btn-outline-danger" onclick="deleteAccount()" type="button">
-<i class="fas fa-user-times me-2"></i>
-                                Eliminar Cuenta
-                            </button>
-</div>
-</div>
-</div>
-<div class="alert alert-warning mt-3" role="alert">
-<i class="fas fa-exclamation-triangle me-2"></i>
-<strong>Importante:</strong> Algunas acciones como eliminar la cuenta son irreversibles. 
-                    Asegúrate de tener respaldos de tu información importante.
-                </div>
-</div>
-<!-- Resumen de Productividad -->
-<div class="profile-section">
-<h4 class="section-title">
-<i class="fas fa-chart-bar text-info"></i>
-                    Resumen de Productividad
-                </h4>
-<div class="row">
-<div class="col-md-4 mb-3">
-<div class="text-center p-3 bg-light rounded">
-<i class="fas fa-fire fa-2x text-danger mb-2"></i>
-<h5 class="mb-1">7</h5>
-<small class="text-muted">Días Activo</small>
-</div>
-</div>
-<div class="col-md-4 mb-3">
-<div class="text-center p-3 bg-light rounded">
-<i class="fas fa-target fa-2x text-success mb-2"></i>
-<h5 class="mb-1">{{ productivity }}%</h5>
-<small class="text-muted">Tasa de Completado</small>
-</div>
-</div>
-<div class="col-md-4 mb-3">
-<div class="text-center p-3 bg-light rounded">
-<i class="fas fa-trophy fa-2x text-warning mb-2"></i>
-<h5 class="mb-1">
-                                {% if productivity >= 80 %}A+
-                                {% elif productivity >= 60 %}B+
-                                {% elif productivity >= 40 %}C
-                                {% else %}D
-                                {% endif %}
-                            </h5>
-<small class="text-muted">Calificación</small>
-</div>
-</div>
-</div>
-<!-- Gráfico de Progreso Semanal -->
-<div class="mt-3">
-<h6>Progreso de la Semana</h6>
-<div class="d-flex justify-content-between align-items-end" style="height: 100px;">
-<div class="d-flex flex-column align-items-center">
-<div class="bg-primary rounded" style="width: 20px; height: 60px; margin-bottom: 5px;"></div>
-<small>Lun</small>
-</div>
-<div class="d-flex flex-column align-items-center">
-<div class="bg-primary rounded" style="width: 20px; height: 40px; margin-bottom: 5px;"></div>
-<small>Mar</small>
-</div>
-<div class="d-flex flex-column align-items-center">
-<div class="bg-primary rounded" style="width: 20px; height: 80px; margin-bottom: 5px;"></div>
-<small>Mié</small>
-</div>
-<div class="d-flex flex-column align-items-center">
-<div class="bg-primary rounded" style="width: 20px; height: 30px; margin-bottom: 5px;"></div>
-<small>Jue</small>
-</div>
-<div class="d-flex flex-column align-items-center">
-<div class="bg-primary rounded" style="width: 20px; height: 70px; margin-bottom: 5px;"></div>
-<small>Vie</small>
-</div>
-<div class="d-flex flex-column align-items-center">
-<div class="bg-secondary rounded" style="width: 20px; height: 20px; margin-bottom: 5px;"></div>
-<small>Sáb</small>
-</div>
-<div class="d-flex flex-column align-items-center">
-<div class="bg-secondary rounded" style="width: 20px; height: 10px; margin-bottom: 5px;"></div>
-<small>Dom</small>
-</div>
-</div>
-</div>
-</div>
-</div>
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <h1 class="mb-1">
+          <i class="fas fa-user-circle me-2"></i>Mi Perfil
+        </h1>
+        <p class="mb-0 opacity-75">
+          Gestiona tu información personal y preferencias
+        </p>
+      </div>
+      <div class="col-md-4 text-md-end">
+        <div class="d-flex gap-2 justify-content-md-end justify-content-center mt-3 mt-md-0">
+          <button class="btn btn-light" onclick="toggleEditMode()" type="button">
+            <i class="fas fa-edit me-1"></i>Editar Perfil
+          </button>
+          <a class="btn btn-outline-light" href="{{ url_for('auth.change_password') }}">
+            <i class="fas fa-key me-1"></i>Cambiar Contraseña
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
+<div class="container">
+  <div class="row">
+    <!-- Columna izquierda: perfil -->
+    <div class="col-lg-4">
+      <div class="profile-container">
+        <div class="profile-avatar mt-3">
+          {% set first_letter = session.full_name[0].upper() if session.full_name else 'U' %}
+          {{ first_letter }}
+        </div>
+        <div id="profileView" class="profile-view">
+          <h3 class="profile-name">{{ session.full_name }}</h3>
+          <div class="profile-role">{{ session.role }}</div>
+          <p class="text-muted">{{ session.get('email', '') }}</p>
+          <p class="text-muted"><i class="fas fa-user me-1"></i>@{{ session.username }}</p>
+        </div>
+        <div id="editForm" class="edit-form" style="display:none;">
+          <form action="{{ url_for('auth.profile_update') }}" method="POST">
+            <div class="mb-3">
+              <label for="full_name" class="form-label">Nombre Completo</label>
+              <input type="text" id="full_name" name="full_name" class="form-control" value="{{ session.full_name }}" required>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Correo Electrónico</label>
+              <input type="email" id="email" name="email" class="form-control" value="{{ session.get('email', '') }}" required>
+            </div>
+            <div class="mb-3">
+              <label for="password_confirm" class="form-label">Confirmar con Contraseña</label>
+              <input type="password" id="password_confirm" name="password" class="form-control" placeholder="Tu contraseña actual" required>
+              <div class="form-text">Confirma tu contraseña para guardar los cambios</div>
+            </div>
+            <div class="d-grid gap-2">
+              <button class="btn btn-edit" type="submit"><i class="fas fa-save me-2"></i>Guardar Cambios</button>
+              <button class="btn btn-outline-secondary" type="button" onclick="toggleEditMode()"><i class="fas fa-times me-2"></i>Cancelar</button>
+            </div>
+          </form>
+        </div>
+        <!-- Logros -->
+        <div class="mt-3">
+          <h6 class="mb-2"><i class="fas fa-trophy me-2 text-warning"></i>Logros</h6>
+          {% if stats.completed_tasks >= 10 %}
+            <span class="achievement-badge"><i class="fas fa-star me-1"></i>Productivo</span>
+          {% endif %}
+          {% if stats.total_events >= 5 %}
+            <span class="achievement-badge"><i class="fas fa-calendar me-1"></i>Organizador</span>
+          {% endif %}
+          {% if session.role == 'Organizador' %}
+            <span class="achievement-badge"><i class="fas fa-crown me-1"></i>Líder</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna derecha: estadísticas -->
+    <div class="col-lg-8">
+      {% set productivity = stats.total_tasks > 0 and (stats.completed_tasks / stats.total_tasks * 100) | round(0) | int or 0 %}
+      <div class="profile-stats">
+        <h6 class="mb-3"><i class="fas fa-chart-line me-2"></i>Mis Estadísticas</h6>
+        <div class="row">
+          <div class="col-6">
+            <div class="stat-item"><div class="stat-number text-primary">{{ stats.total_tasks }}</div><p class="stat-label">Tareas Totales</p></div>
+          </div>
+          <div class="col-6">
+            <div class="stat-item"><div class="stat-number text-success">{{ stats.completed_tasks }}</div><p class="stat-label">Completadas</p></div>
+          </div>
+          <div class="col-6">
+            <div class="stat-item"><div class="stat-number text-info">{{ stats.total_events }}</div><p class="stat-label">Eventos</p></div>
+          </div>
+          <div class="col-6">
+            <div class="stat-item"><div class="stat-number text-warning">{{ productivity }}%</div><p class="stat-label">Productividad</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="progress-container mt-4">
+        <div class="progress-label d-flex justify-content-between"><span>Progreso del Mes</span><span>{{ productivity }}%</span></div>
+        <div class="progress">
+          <div class="progress-bar bg-success" style="width: {{ productivity }}%;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-$(document).ready(function() {
-    // Funciones para gestión del perfil
-    
-    // Toggle entre vista y edición
-    window.toggleEditMode = function() {
-        const profileView = document.getElementById('profileView');
-        const editForm = document.getElementById('editForm');
-        
-        if (editForm.classList.contains('show')) {
-            // Cambiar a vista
-            editForm.classList.remove('show');
-            profileView.classList.remove('hide');
-        } else {
-            // Cambiar a edición
-            editForm.classList.add('show');
-            profileView.classList.add('hide');
-        }
-    };
-    
-    // Función para exportar datos del usuario
-    window.exportUserData = function() {
-        if (confirm('¿Quieres exportar todos tus datos de Taskly?')) {
-            showNotification('Preparando exportación de datos...', 'info');
-            
-            // Obtener datos del script JSON
-            const userDataScript = document.getElementById('user-profile-data');
-            const userData = JSON.parse(userDataScript.textContent);
-            
-            setTimeout(() => {
-                const data = {
-                    user: {
-                        username: userData.username,
-                        full_name: userData.full_name,
-                        email: userData.email,
-                        role: userData.role
-                    },
-                    stats: userData.stats,
-                    export_date: new Date().toISOString()
-                };
-                
-                const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'taskly_user_data.json';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                
-                showNotification('Datos exportados exitosamente', 'success');
-            }, 2000);
-        }
-    };
-    
-    // Función para limpiar datos
-    window.clearUserData = function() {
-        const confirmation = confirm('¿Estás seguro de que quieres limpiar todos tus datos?\n\nEsto eliminará:\n- Todas tus tareas\n- Todos tus eventos\n- Tu historial de actividad\n\nEsta acción NO se puede deshacer.');
-        
-        if (confirmation) {
-            const doubleConfirmation = prompt('Para confirmar, escribe "LIMPIAR" en mayúsculas:');
-            
-            if (doubleConfirmation === 'LIMPIAR') {
-                showNotification('Limpiando datos de usuario...', 'warning');
-                
-                // En implementación real, hacer llamada al servidor
-                setTimeout(() => {
-                    showNotification('Datos limpiados exitosamente', 'success');
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1500);
-                }, 2000);
-            } else {
-                showNotification('Operación cancelada', 'info');
-            }
-        }
-    };
-    
-    // Función para eliminar cuenta
-    window.deleteAccount = function() {
-        const confirmation = confirm('⚠️ ADVERTENCIA ⚠️\n\n¿Estás ABSOLUTAMENTE seguro de que quieres eliminar tu cuenta?\n\nEsta acción:\n- Eliminará permanentemente tu cuenta\n- Borrará todos tus datos\n- NO se puede deshacer\n\n¿Continuar?');
-        
-        if (confirmation) {
-            const username = prompt('Para confirmar la eliminación, escribe tu nombre de usuario:');
-            
-            if (username === "{{ session.username }}") {
-                const password = prompt('Ingresa tu contraseña para confirmar:');
-                
-                if (password) {
-                    showNotification('Procesando eliminación de cuenta...', 'danger');
-                    
-                    // En implementación real, hacer llamada al servidor
-                    setTimeout(() => {
-                        alert('Cuenta eliminada. Serás redirigido a la página principal.');
-                        window.location.href = "{{ url_for('auth.logout') }}";
-                    }, 3000);
-                }
-            } else {
-                showNotification('Nombre de usuario incorrecto. Operación cancelada.', 'error');
-            }
-        }
-    };
-    
-    // Manejar cambios en switches
-    document.getElementById('notifications').addEventListener('change', function() {
-        const label = this.nextElementSibling;
-        label.textContent = this.checked ? 'Activadas' : 'Desactivadas';
-        
-        showNotification(
-            this.checked ? 'Notificaciones activadas' : 'Notificaciones desactivadas', 
-            'info'
-        );
-    });
-    
-    document.getElementById('darkMode').addEventListener('change', function() {
-        const label = this.nextElementSibling;
-        label.textContent = this.checked ? 'Activado' : 'Desactivado';
-        
-        // Simular cambio de tema
-        if (this.checked) {
-            document.body.style.filter = 'invert(1) hue-rotate(180deg)';
-            showNotification('Modo oscuro activado', 'info');
-        } else {
-            document.body.style.filter = 'none';
-            showNotification('Modo claro activado', 'info');
-        }
-    });
-    
-    // Función para mostrar notificaciones
-    function showNotification(message, type = 'info') {
-        const notification = document.createElement('div');
-        notification.className = `alert alert-${type === 'error' ? 'danger' : type} alert-dismissible fade show position-fixed`;
-        notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
-        
-        notification.innerHTML = `
-            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-triangle' : type === 'warning' ? 'exclamation-circle' : 'info-circle'} me-2"></i>
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        `;
-        
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            if (notification && notification.parentNode) {
-                notification.remove();
-            }
-        }, 4000);
-    }
-    
-    // Validación del formulario de edición
-    document.querySelector('#editForm form').addEventListener('submit', function(e) {
-        const fullName = document.getElementById('full_name').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password_confirm').value;
-        
-        if (!fullName || !email || !password) {
-            e.preventDefault();
-            showNotification('Por favor completa todos los campos', 'error');
-            return;
-        }
-        
-        if (!email.includes('@')) {
-            e.preventDefault();
-            showNotification('Por favor ingresa un email válido', 'error');
-            return;
-        }
-        
-        showNotification('Guardando cambios...', 'info');
-    });
-    
-    // Atajos de teclado
-    document.addEventListener('keydown', function(e) {
-        // E = Editar perfil
-        if (e.key === 'e' || e.key === 'E') {
-            e.preventDefault();
-            toggleEditMode();
-        }
-        
-        // Escape = Cancelar edición
-        if (e.key === 'Escape') {
-            const editForm = document.getElementById('editForm');
-            if (editForm.classList.contains('show')) {
-                toggleEditMode();
-            }
-        }
-    });
-    
-    // Animaciones de entrada
-    const sections = document.querySelectorAll('.profile-section, .profile-container, .profile-stats');
-    sections.forEach((section, index) => {
-        section.style.animationDelay = `${index * 0.1}s`;
-        section.style.opacity = '0';
-        section.style.transform = 'translateY(20px)';
-        
-        setTimeout(() => {
-            section.style.transition = 'all 0.5s ease';
-            section.style.opacity = '1';
-            section.style.transform = 'translateY(0)';
-        }, index * 100);
-    });
-});
+function toggleEditMode() {
+  const view = document.getElementById('profileView');
+  const form = document.getElementById('editForm');
+  if (form.style.display === 'none') {
+    form.style.display = 'block';
+    view.style.display = 'none';
+  } else {
+    form.style.display = 'none';
+    view.style.display = 'block';
+  }
+}
 </script>
 {% endblock %}
