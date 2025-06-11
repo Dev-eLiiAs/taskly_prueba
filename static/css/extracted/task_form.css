@@ -1,0 +1,59 @@
+/* Card de tarea */
+.task-card {
+  max-width: 700px;
+  border: none;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Header con color */
+.task-card .card-header {
+  background: linear-gradient(135deg, #6c757d, #5a6268);
+}
+
+/* Cuerpo */
+.task-card .card-body {
+  background: #ffffff;
+  color: #343a40;
+  padding: 2rem;
+}
+
+/* Labels */
+.form-label {
+  font-weight: 600;
+  color: #495057;
+}
+
+/* Inputs y selects */
+.form-control, .form-select {
+  background: #f1f3f5;
+  border: 1px solid #ced4da;
+  border-radius: 0.5rem;
+  padding: 0.6rem 1rem;
+  color: #212529;
+}
+.form-control:focus, .form-select:focus {
+  border-color: #6c757d;
+  box-shadow: 0 0 0 0.2rem rgba(108,117,125,0.25);
+}
+
+/* Textarea */
+textarea.form-control {
+  resize: vertical;
+}
+
+/* Botones */
+.btn-secondary {
+  background: #6c757d;
+  border-color: #6c757d;
+}
+.btn-secondary:hover {
+  background: #5a6268;
+  border-color: #545b62;
+}
+
+/* Espaciado en filas */
+.row.g-3 > [class*="col-"] {
+  margin-bottom: 1rem;
+}

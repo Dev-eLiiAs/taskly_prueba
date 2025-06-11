@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/acciones_rapidas.css') }}">
+<div class="acciones-rapidas">
+    <h2>⚡ Acciones Rápidas</h2>
+    <div class="quick-actions">
+        <a href="/task/add" class="action purple">➕<br>Nueva Tarea<br><small>Crear una nueva tarea</small></a>
+        <a href="/event/add" class="action green">📅<br>Nuevo Evento<br><small>Agendar un evento</small></a>
+        <a href="/tasks/urgent" class="action orange">⚠️<br>Tareas Urgentes<br><small>Ver tareas próximas a vencer</small></a>
+        <a href="/events/upcoming" class="action blue">🗓️<br>Eventos Próximos<br><small>Revisar próximos eventos</small></a>
+        <a href="/admin" class="action gray">📈<br>Panel Admin<br><small>Estadísticas del sistema</small></a>
+    </div>
+</div>
+{% endblock %}

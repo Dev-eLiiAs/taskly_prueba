@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/event_form.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="card event-card mx-auto shadow-lg">
+    <div class="card-header text-white text-center">
+      <h3 class="mb-0">
+        {{ 'Editar Evento' if action == 'edit' else 'Nuevo Evento' }}
+      </h3>
+    </div>
+    <div class="card-body">
+      <form method="POST">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="title" class="form-label">Título</label>
+            <input type="text" id="title" name="title" class="form-control" required
+                   value="{{ event.title if event else '' }}">
+          </div>
+          <div class="col-md-6">
+            <label for="location" class="form-label">Ubicación</label>
+            <input type="text" id="location" name="location" class="form-control"
+                   value="{{ event.location if event else '' }}">
+          </div>
+          <div class="col-md-6">
+            <label for="event_date" class="form-label">Fecha</label>
+            <input type="date" id="event_date" name="event_date" class="form-control" required
+                   value="{{ event.event_date.strftime('%Y-%m-%d') if event and event.event_date }}">
+          </div>
+          <div class="col-md-6">
+            <label for="event_time" class="form-label">Hora</label>
+            <input type="time" id="event_time" name="event_time" class="form-control"
+                   value="{{ event.event_date.strftime('%H:%M') if event and event.event_date.time() }}">
+          </div>
+          <div class="col-12">
+            <label for="description" class="form-label">Descripción</label>
+            <textarea id="description" name="description" rows="4" class="form-control">{{ event.description if event else '' }}</textarea>
+          </div>
+          <div class="col-md-6">
+            <label for="reminder" class="form-label">Recordatorio (minutos antes)</label>
+            <input type="number" id="reminder" name="reminder" min="0" class="form-control"
+                   placeholder="Ej: 30"
+                   value="{{ event.reminder if event else '' }}">
+          </div>
+        </div>
+
+        <div class="d-grid mt-4">
+          <button type="submit" class="btn btn-primary btn-lg">
+            <i class="fas fa-save me-2"></i>Guardar Evento
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

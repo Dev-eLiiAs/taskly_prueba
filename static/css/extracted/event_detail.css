@@ -1,0 +1,49 @@
+.event-detail-card {
+  max-width: 600px;
+  border: none;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.event-detail-card .card-header {
+  background: linear-gradient(135deg, #007bff, #0062cc);
+}
+
+.event-detail-card .card-body {
+  background: #f8f9fa;
+  color: #343a40;
+  padding: 2rem;
+}
+
+.event-detail-card .card-body .badge {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+}
+
+.event-detail-card .card-footer {
+  background: #ffffff;
+  padding: 1rem;
+}
+
+.event-detail-card .btn-outline-secondary {
+  color: #343a40;
+  border-color: #adb5bd;
+}
+
+.event-detail-card .btn-outline-secondary:hover {
+  background: #e2e6ea;
+  border-color: #adb5bd;
+}
+
+/* Espaciado interno */
+.event-detail-card .row > .col-md-6 {
+  margin-bottom: 1rem;
+}
+
+/* Texto descriptivo */
+.event-detail-card .card-body p {
+  margin: 0.5rem 0 0;
+  line-height: 1.5;
+  color: #495057;
+}

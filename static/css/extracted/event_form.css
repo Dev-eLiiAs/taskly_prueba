@@ -1,0 +1,61 @@
+/* Card general */
+.event-card {
+  max-width: 700px;
+  border: none;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+/* Header con degradado */
+.event-card .card-header {
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+}
+
+/* Cuerpo de la tarjeta */
+.event-card .card-body {
+  background: #1f1f2e;
+  color: #f1f1f5;
+  padding: 2rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Labels y campos */
+.form-label {
+  font-weight: 600;
+  color: #c1c1c8;
+}
+.form-control {
+  background: #2a2a3d;
+  border: none;
+  border-radius: 0.5rem;
+  color: #fff;
+  padding: 0.75rem 1rem;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+}
+.form-control:focus {
+  background: #323248;
+  color: #fff;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.4), 0 0 0 0.25rem rgba(46, 204, 113, 0.25);
+}
+
+/* Textarea */
+textarea.form-control {
+  resize: vertical;
+}
+
+/* Botón principal */
+.btn-primary {
+  background: #27ae60;
+  border: none;
+  border-radius: 0.75rem;
+  font-size: 1.1rem;
+}
+.btn-primary:hover {
+  background: #22a65b;
+}
+
+/* Espaciado interno */
+.g-3 > .col-md-6,
+.g-3 > .col-12 {
+  margin-bottom: 1rem;
+}

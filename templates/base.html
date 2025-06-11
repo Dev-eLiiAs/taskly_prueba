@@ -1,172 +1,152 @@
 <!DOCTYPE html>
+
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Taskly - Gestión de Tareas y Eventos{% endblock %}</title>
-    
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+<head><link href="{{ url_for('static', filename='css/extracted/common.css') }}" rel="stylesheet" type="text/css"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>{% block title %}Taskly - Gestión de Tareas y Eventos{% endblock %}</title>
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<!-- Font Awesome Icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet"/>
+<!-- Favicon -->
+<link href="{{ url_for('static', filename='images/favicon.ico') }}" rel="icon" type="image/x-icon"/>
     
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <!-- Navigation Bar -->
+<!-- Navigation Bar -->
     {% if current_user %}
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
-        <div class="container-fluid">
-            <!-- Brand -->
-            <a class="navbar-brand fw-bold" href="{{ url_for('main.home') }}">
-                <i class="fas fa-tasks me-2"></i>Taskly
+<div class="container-fluid">
+<!-- Brand -->
+<a class="navbar-brand fw-bold" href="{{ url_for('main.home') }}">
+<i class="fas fa-tasks me-2"></i>Taskly
             </a>
-            
-            <!-- Mobile Toggle -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <!-- Navigation Items -->
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- Left Menu -->
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link {{ 'active' if request.endpoint == 'main.home' }}" 
-                           href="{{ url_for('main.home') }}">
-                            <i class="fas fa-home me-1"></i>Dashboard
+<!-- Mobile Toggle -->
+<button class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
+<span class="navbar-toggler-icon"></span>
+</button>
+<!-- Navigation Items -->
+<div class="collapse navbar-collapse" id="navbarNav">
+<!-- Left Menu -->
+<ul class="navbar-nav me-auto">
+<li class="nav-item">
+<a class="nav-link {{ 'active' if request.endpoint == 'main.home' }}" href="{{ url_for('main.home') }}">
+<i class="fas fa-home me-1"></i>Dashboard
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ 'active' if 'tasks' in request.endpoint }}" 
-                           href="{{ url_for('tasks.tasks') }}">
-                            <i class="fas fa-list-check me-1"></i>Tareas
+</li>
+<li class="nav-item">
+<a class="nav-link {{ 'active' if 'tasks' in request.endpoint }}" href="{{ url_for('tasks.add_task') }}">
+<i class="fas fa-list-check me-1"></i>Tareas
                             {% if task_counts and task_counts.urgent > 0 %}
                                 <span class="badge bg-danger ms-1">{{ task_counts.urgent }}</span>
                             {% endif %}
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ 'active' if 'events' in request.endpoint or 'calendar' in request.endpoint }}" 
-                           href="{{ url_for('events.event_calendar') }}">
-                            <i class="fas fa-calendar-alt me-1"></i>Calendario
+</li>
+<li class="nav-item">
+<a class="nav-link {{ 'active' if 'events' in request.endpoint or 'calendar' in request.endpoint }}" href="{{ url_for('events.event_calendar') }}">
+<i class="fas fa-calendar-alt me-1"></i>Calendario
                             {% if event_counts and event_counts.today > 0 %}
                                 <span class="badge bg-warning ms-1">{{ event_counts.today }}</span>
                             {% endif %}
                         </a>
-                    </li>
-                    
-                    <!-- Admin Menu (Solo para Organizadores) -->
+</li>
+<!-- Admin Menu (Solo para Organizadores) -->
                     {% if is_organizer %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" 
-                           data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-cog me-1"></i>Admin
+<a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="adminDropdown" role="button">
+<i class="fas fa-cog me-1"></i>Admin
                         </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ url_for('main.admin') }}">
-                                <i class="fas fa-chart-line me-2"></i>Estadísticas
+<ul class="dropdown-menu">
+<li><a class="dropdown-item" href="{{ url_for('main.admin') }}">
+<i class="fas fa-chart-line me-2"></i>Estadísticas
                             </a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('tasks.task_statistics') }}">
-                                <i class="fas fa-tasks me-2"></i>Análisis Tareas
+<li><a class="dropdown-item" href="{{ url_for('tasks.task_statistics') }}">
+<i class="fas fa-tasks me-2"></i>Análisis Tareas
                             </a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{{ url_for('main.settings') }}">
-                                <i class="fas fa-tools me-2"></i>Configuración
+<li><hr class="dropdown-divider"/></li>
+<li><a class="dropdown-item" href="{{ url_for('main.settings') }}">
+<i class="fas fa-tools me-2"></i>Configuración
                             </a></li>
-                        </ul>
-                    </li>
+</ul>
+</li>
                     {% endif %}
                 </ul>
-                
-                <!-- Search Bar -->
-                <form class="d-flex me-3" method="GET" action="{{ url_for('main.search') }}">
-                    <div class="input-group">
-                        <input class="form-control form-control-sm" type="search" name="q" 
-                               placeholder="Buscar tareas y eventos..." aria-label="Search"
-                               value="{{ request.args.get('q', '') }}">
-                        <button class="btn btn-outline-light btn-sm" type="submit">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </form>
-                
-                <!-- Right Menu -->
-                <ul class="navbar-nav">
-                    <!-- Notifications -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle position-relative" href="#" id="notificationsDropdown" 
-                           role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-bell"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" 
-                                  id="notification-count" style="display: none;">
+<!-- Search Bar -->
+<form action="{{ url_for('main.search') }}" class="d-flex me-3" method="GET">
+<div class="input-group">
+<input aria-label="Search" class="form-control form-control-sm" name="q" placeholder="Buscar tareas y eventos..." type="search" value="{{ request.args.get('q', '') }}"/>
+<button class="btn btn-outline-light btn-sm" type="submit">
+<i class="fas fa-search"></i>
+</button>
+</div>
+</form>
+<!-- Right Menu -->
+<ul class="navbar-nav">
+<!-- Notifications -->
+<li class="nav-item dropdown">
+<a aria-expanded="false" class="nav-link dropdown-toggle position-relative" data-bs-toggle="dropdown" href="#" id="notificationsDropdown" role="button">
+<i class="fas fa-bell"></i>
+<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notification-count" style="display: none;">
                                 0
                             </span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" style="width: 300px;">
-                            <li>
-                                <h6 class="dropdown-header">
-                                    <i class="fas fa-bell me-2"></i>Notificaciones
+</a>
+<ul class="dropdown-menu dropdown-menu-end" style="width: 300px;">
+<li>
+<h6 class="dropdown-header">
+<i class="fas fa-bell me-2"></i>Notificaciones
                                 </h6>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <div id="notifications-container">
-                                <li><span class="dropdown-item-text text-muted">Cargando notificaciones...</span></li>
-                            </div>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item text-center" href="{{ url_for('main.notifications') }}">
+</li>
+<li><hr class="dropdown-divider"/></li>
+<div id="notifications-container">
+<li><span class="dropdown-item-text text-muted">Cargando notificaciones...</span></li>
+</div>
+<li><hr class="dropdown-divider"/></li>
+<li>
+<a class="dropdown-item text-center" href="{{ url_for('main.notifications') }}">
                                     Ver todas las notificaciones
                                 </a>
-                            </li>
-                        </ul>
-                    </li>
-                    
-                    <!-- User Menu -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" 
-                           data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user-circle me-1"></i>
+</li>
+</ul>
+</li>
+<!-- User Menu -->
+<li class="nav-item dropdown">
+<a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="userDropdown" role="button">
+<i class="fas fa-user-circle me-1"></i>
                             {{ current_user.full_name }}
                             <small class="text-white-50">({{ current_user.role }})</small>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <h6 class="dropdown-header">
-                                    <i class="fas fa-user me-2"></i>{{ current_user.full_name }}
-                                    <br><small class="text-muted">{{ current_user.email }}</small>
-                                </h6>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{{ url_for('main.profile') }}">
-                                <i class="fas fa-user-edit me-2"></i>Mi Perfil
+</a>
+<ul class="dropdown-menu dropdown-menu-end">
+<li>
+<h6 class="dropdown-header">
+<i class="fas fa-user me-2"></i>{{ current_user.full_name }}
+                                    <br/><small class="text-muted">{{ current_user.email }}</small>
+</h6>
+</li>
+<li><hr class="dropdown-divider"/></li>
+<li><a class="dropdown-item" href="{{ url_for('main.profile') }}">
+<i class="fas fa-user-edit me-2"></i>Mi Perfil
                             </a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('auth.change_password') }}">
-                                <i class="fas fa-key me-2"></i>Cambiar Contraseña
+<li><a class="dropdown-item" href="{{ url_for('auth.change_password') }}">
+<i class="fas fa-key me-2"></i>Cambiar Contraseña
                             </a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('main.help') }}">
-                                <i class="fas fa-question-circle me-2"></i>Ayuda
+<li><a class="dropdown-item" href="{{ url_for('main.help') }}">
+<i class="fas fa-question-circle me-2"></i>Ayuda
                             </a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}">
-                                <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+<li><hr class="dropdown-divider"/></li>
+<li><a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}">
+<i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
                             </a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</nav>
     {% endif %}
     
     <!-- Flash Messages -->
@@ -185,96 +165,91 @@
                             <i class="fas fa-info-circle me-2"></i>
                         {% endif %}
                         {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
+                        <button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
+</div>
                 {% endfor %}
             </div>
         {% endif %}
     {% endwith %}
     
     <!-- Main Content -->
-    <main>
+<main>
         {% block content %}{% endblock %}
     </main>
-    
-    <!-- Footer -->
+<!-- Footer -->
     {% if current_user %}
     <footer class="bg-light text-center text-muted py-4 mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 text-md-start">
-                    <p class="mb-0">
-                        <strong>Taskly</strong> - Sistema de Gestión de Tareas y Eventos
+<div class="container">
+<div class="row">
+<div class="col-md-6 text-md-start">
+<p class="mb-0">
+<strong>Taskly</strong> - Sistema de Gestión de Tareas y Eventos
                     </p>
-                    <small>Versión 1.0.0 | Desarrollado con Python Flask</small>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <div class="d-flex justify-content-md-end justify-content-center gap-3">
-                        <a href="{{ url_for('main.about') }}" class="text-decoration-none">
-                            <i class="fas fa-info-circle"></i> Acerca de
+<small>Versión 1.0.0 | Desarrollado con Python Flask</small>
+</div>
+<div class="col-md-6 text-md-end">
+<div class="d-flex justify-content-md-end justify-content-center gap-3">
+<a class="text-decoration-none" href="{{ url_for('main.about') }}">
+<i class="fas fa-info-circle"></i> Acerca de
                         </a>
-                        <a href="{{ url_for('main.help') }}" class="text-decoration-none">
-                            <i class="fas fa-question-circle"></i> Ayuda
+<a class="text-decoration-none" href="{{ url_for('main.help') }}">
+<i class="fas fa-question-circle"></i> Ayuda
                         </a>
-                        <a href="{{ url_for('tasks.export_tasks') }}" class="text-decoration-none">
-                            <i class="fas fa-download"></i> Exportar
+<a class="text-decoration-none" href="{{ url_for('tasks.export_tasks') }}">
+<i class="fas fa-download"></i> Exportar
                         </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
+</div>
+</div>
+</div>
+</div>
+</footer>
     {% endif %}
     
     <!-- Quick Action Button (FAB) -->
     {% if current_user %}
     <div class="fab-container">
-        <div class="fab-button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fas fa-plus"></i>
-        </div>
-        <ul class="dropdown-menu dropdown-menu-end mb-2">
-            <li>
-                <a class="dropdown-item" href="{{ url_for('tasks.add_task') }}">
-                    <i class="fas fa-tasks text-primary me-2"></i>Nueva Tarea
+<div aria-expanded="false" class="fab-button" data-bs-toggle="dropdown">
+<i class="fas fa-plus"></i>
+</div>
+<ul class="dropdown-menu dropdown-menu-end mb-2">
+<li>
+<a class="dropdown-item" href="{{ url_for('tasks.add_task') }}">
+<i class="fas fa-tasks text-primary me-2"></i>Nueva Tarea
                 </a>
-            </li>
-            <li>
-                <a class="dropdown-item" href="{{ url_for('events.add_event') }}">
-                    <i class="fas fa-calendar-plus text-success me-2"></i>Nuevo Evento
+</li>
+<li>
+<a class="dropdown-item" href="{{ url_for('events.add_event') }}">
+<i class="fas fa-calendar-plus text-success me-2"></i>Nuevo Evento
                 </a>
-            </li>
-            <li><hr class="dropdown-divider"></li>
-            <li>
-                <a class="dropdown-item" href="{{ url_for('tasks.urgent_tasks') }}">
-                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>Tareas Urgentes
+</li>
+<li><hr class="dropdown-divider"/></li>
+<li>
+<a class="dropdown-item" href="{{ url_for('tasks.urgent_tasks') }}">
+<i class="fas fa-exclamation-triangle text-warning me-2"></i>Tareas Urgentes
                 </a>
-            </li>
-        </ul>
-    </div>
+</li>
+</ul>
+</div>
     {% endif %}
     
     <!-- Loading Overlay -->
-    <div id="loading-overlay" class="loading-overlay" style="display: none;">
-        <div class="d-flex justify-content-center align-items-center h-100">
-            <div class="text-center">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Cargando...</span>
-                </div>
-                <div class="mt-2 text-white">Cargando...</div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
-    <!-- Custom JavaScript -->
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    
-    <!-- Global JavaScript Functions -->
+<div class="loading-overlay" id="loading-overlay" style="display: none;">
+<div class="d-flex justify-content-center align-items-center h-100">
+<div class="text-center">
+<div class="spinner-border text-primary" role="status">
+<span class="visually-hidden">Cargando...</span>
+</div>
+<div class="mt-2 text-white">Cargando...</div>
+</div>
+</div>
+</div>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Custom JavaScript -->
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<!-- Global JavaScript Functions -->
     {% if session.user_id %}
     <script id="user-data" type="application/json">
     {

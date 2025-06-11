@@ -1,0 +1,54 @@
+.acciones-rapidas {
+    padding: 2rem;
+    max-width: 800px;
+    margin: auto;
+    color: #fff;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.acciones-rapidas h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.action {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    border-radius: 15px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.action small {
+    display: block;
+    margin-top: 0.5rem;
+    font-weight: normal;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.action:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.purple { background: linear-gradient(135deg, #8e44ad, #9b59b6); }
+.green { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+.orange { background: linear-gradient(135deg, #e67e22, #f39c12); }
+.blue { background: linear-gradient(135deg, #3498db, #5dade2); }
+.gray { background: linear-gradient(135deg, #7f8c8d, #95a5a6); }
