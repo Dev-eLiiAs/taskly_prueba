@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/calendar.css') }}">
+  <!-- FullCalendar CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet" />
+  <!-- Tus overrides -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/calendar.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -13,31 +16,23 @@
 {% endblock %}
 
 {% block extra_js %}
-<!-- FullCalendar core y plugin dayGrid -->
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  var calendarEl = document.getElementById('calendar');
-  fetch("{{ url_for('events.api_events') }}")
-    .then(res => res.json())
-    .then(data => {
-      // data.notifications o data.events según tu API
-      var events = data.events || data;
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        headerToolbar: {
-          left: 'prev',
-          center: 'title',
-          right: 'next'
-        },
-        events: events,
-        height: 'auto',
-      });
-      calendar.render();
-    })
-    .catch(err => {
-      console.error("Error cargando eventos:", err);
+  <!-- FullCalendar JS -->
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      fetch("{{ url_for('events.api_events') }}")
+        .then(res => res.json())
+        .then(data => {
+          var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            headerToolbar: { left: 'prev', center: 'title', right: 'next' },
+            events: data.events || data,
+            height: 'auto'
+          });
+          calendar.render();
+        })
+        .catch(console.error);
     });
-});
-</script>
+  </script>
 {% endblock %}

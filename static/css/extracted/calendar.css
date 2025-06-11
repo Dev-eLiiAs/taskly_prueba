@@ -1,102 +1,87 @@
-/* Contenedor principal */
+/* Tu override debe cargarse tras fullcalendar.css */
+
+/* Card contenedor */
 .calendar-container {
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  padding: 1rem;
-  margin: 2rem auto;
-  max-width: 900px;
+  background: #fff !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+  padding: 1rem !important;
+  margin: 2rem auto !important;
+  max-width: 800px !important;
 }
 
-/* Toolbar */
-.fc .fc-toolbar {
-  background: #f8f9fa;
-  border: none;
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
-  margin-bottom: 1rem;
+/* Toolbar: selector más específico */
+.calendar-container .fc .fc-toolbar {
+  background: #f1f3f5 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 0.5rem 1rem !important;
+  margin-bottom: 1rem !important;
 }
-.fc .fc-toolbar-title {
-  color: #343a40;
-  font-size: 1.5rem;
-  font-weight: 600;
+.calendar-container .fc .fc-toolbar .fc-toolbar-title {
+  color: #343a40 !important;
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
 }
-.fc .fc-button {
-  background: #e9ecef;
-  border: none;
-  color: #495057;
-  border-radius: 4px;
-  padding: 0.3rem 0.8rem;
-  margin: 0 0.25rem;
+.calendar-container .fc .fc-toolbar .fc-button {
+  background: #ffffff !important;
+  border: 1px solid #ced4da !important;
+  color: #495057 !important;
+  border-radius: 4px !important;
+  padding: 0.25rem 0.75rem !important;
+  margin: 0 0.25rem !important;
 }
-.fc .fc-button:hover,
-.fc .fc-button:focus {
-  background: #dee2e6;
-  color: #212529;
-}
-
-/* Encabezados de días */
-.fc .fc-col-header-cell {
-  background: #e9ecef;
-  color: #495057;
-  font-weight: 600;
-  text-align: center;
-  padding: 0.6rem 0;
-  border-bottom: 1px solid #dee2e6;
+.calendar-container .fc .fc-toolbar .fc-button:hover,
+.calendar-container .fc .fc-toolbar .fc-button:focus {
+  background: #e9ecef !important;
+  color: #343a40 !important;
 }
 
-/* Celdas del calendario */
-.fc .fc-daygrid-day {
-  background: #ffffff;
-  border: 1px solid #dee2e6;
-}
-.fc .fc-daygrid-day-frame {
-  padding: 0.6rem;
-  display: flex;
-  flex-direction: column;
+/* Encabezado de días */
+.calendar-container .fc .fc-col-header-cell {
+  background: #e9ecef !important;
+  color: #495057 !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+  padding: 0.5rem 0 !important;
 }
 
-/* Número de día */
-.fc .fc-daygrid-day-number {
-  color: #495057;
-  font-weight: 600;
-  margin-bottom: 0.3rem;
+/* Celdas */
+.calendar-container .fc .fc-daygrid-day {
+  background: #fff !important;
+  border: 1px solid #dee2e6 !important;
 }
-
-/* Día de hoy */
-.fc .fc-day-today {
+.calendar-container .fc .fc-daygrid-day-frame {
+  padding: 0.5rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+.calendar-container .fc .fc-daygrid-day-number {
+  color: #6c757d !important;
+  font-weight: 600 !important;
+  margin-bottom: 0.25rem !important;
+}
+.calendar-container .fc .fc-day-today {
   background: #fff3cd !important;
   border-color: #ffeeba !important;
 }
 
-/* Eventos dentro de la celda */
-.fc .fc-event {
-  background: #0d6efd !important;  /* azul bootstrap */
+/* Eventos/tareas */
+.calendar-container .fc .fc-event {
+  background: #0d6efd !important;
   border: none !important;
   color: #fff !important;
   border-radius: 4px !important;
-  padding: 3px 6px !important;
+  padding: 2px 6px !important;
   font-size: 0.85rem !important;
-  margin-bottom: 2px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  margin-bottom: 2px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
-/* Scroll si hay muchos eventos */
-.fc .fc-daygrid-day-frame .fc-scroller {
-  max-height: calc(100% - 1rem);
-  overflow-y: auto;
-}
-
-/* Eliminar líneas sobrantes */
-.fc .fc-scrollgrid thead,
-.fc .fc-scrollgrid tbody {
-  border: none;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .fc .fc-toolbar-title { font-size: 1.25rem; }
-  .fc .fc-daygrid-day-number { font-size: 0.85rem; }
+/* Scroll interno */
+.calendar-container .fc .fc-daygrid-day-frame .fc-scroller {
+  max-height: calc(100% - 1.5rem) !important;
+  overflow-y: auto !important;
 }

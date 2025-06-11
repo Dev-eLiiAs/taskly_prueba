@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 
-
- <head>
+<head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}Taskly - Gestión de Tareas y Eventos{% endblock %}</title>
@@ -22,11 +21,9 @@
 
   {% block extra_css %}{% endblock %}
 
-  <!-- Temas claro/oscuro (cargan al final para override) -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/light_theme.css') }}" id="light-theme">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/dark_theme.css') }}" id="dark-theme" disabled>
 </head>
-
 
 <body>
     <!-- Navigation Bar -->
@@ -65,46 +62,7 @@
                             {% endif %}
                         </a>
                     </li>
-                    {% if is_organizer %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
-                            <i class="fas fa-cog me-1"></i>Admin
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ url_for('main.admin') }}">
-                                <i class="fas fa-chart-line me-2"></i>Estadísticas
-                            </a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('tasks.task_statistics') }}">
-                                <i class="fas fa-tasks me-2"></i>Análisis Tareas
-                            </a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{{ url_for('main.settings') }}">
-                                <i class="fas fa-tools me-2"></i>Configuración
-                            </a></li>
-                        </ul>
-                    </li>
-                    {% endif %}
                 </ul>
-
-                <!-- Theme Toggle -->
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <button id="theme-toggle" class="btn btn-outline-light btn-sm me-3" data-bs-toggle="tooltip" title="Cambiar tema">
-                            <i id="theme-icon" class="fas fa-moon"></i>
-                        </button>
-                    </li>
-                </ul>
-
-                <!-- Search Bar -->
-                <form action="{{ url_for('main.search') }}" class="d-flex me-3" method="GET">
-                    <div class="input-group">
-                        <input class="form-control form-control-sm" name="q" placeholder="Buscar tareas y eventos..." type="search" value="{{ request.args.get('q', '') }}" aria-label="Search">
-                        <button class="btn btn-outline-light btn-sm" type="submit">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </form>
-
                 <!-- Notifications & User -->
                 <ul class="navbar-nav">
                     <!-- Notifications Dropdown -->
@@ -134,7 +92,6 @@
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{{ url_for('main.profile') }}"><i class="fas fa-user-edit me-2"></i>Mi Perfil</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('auth.change_password') }}"><i class="fas fa-key me-2"></i>Cambiar Contraseña</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('main.help') }}"><i class="fas fa-question-circle me-2"></i>Ayuda</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a></li>
                         </ul>
@@ -178,8 +135,6 @@
                 </div>
                 <div class="col-md-6 text-md-end">
                     <div class="d-flex justify-content-md-end gap-3">
-                        <a class="text-decoration-none" href="{{ url_for('main.about') }}"><i class="fas fa-info-circle me-1"></i>Acerca de</a>
-                        <a class="text-decoration-none" href="{{ url_for('main.help') }}"><i class="fas fa-question-circle me-1"></i>Ayuda</a>
                         <a class="text-decoration-none" href="{{ url_for('tasks.export_tasks') }}"><i class="fas fa-download me-1"></i>Exportar</a>
                     </div>
                 </div>
@@ -212,32 +167,30 @@
     <!-- Main JS -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
-    <script>
-  const lightLink = document.getElementById('light-theme');
-  const darkLink  = document.getElementById('dark-theme');
-  const toggle    = document.getElementById('theme-toggle');
-  const icon      = document.getElementById('theme-icon');
-  // Arranca en tema claro por defecto:
-  let theme = localStorage.getItem('theme') || 'light';
-  setTheme(theme);
-  toggle.addEventListener('click', () => {
-    theme = (theme === 'light' ? 'dark' : 'light');
+  <script>
+    const lightLink = document.getElementById('light-theme');
+    const darkLink = document.getElementById('dark-theme');
+    const toggle    = document.getElementById('theme-toggle');
+    const icon      = document.getElementById('theme-icon');
+    let theme = 'light';
     setTheme(theme);
-    localStorage.setItem('theme', theme);
-  });
-  function setTheme(mode) {
-    if (mode === 'dark') {
-      lightLink.disabled = true;
-      darkLink.disabled  = false;
-      icon.classList.replace('fa-moon','fa-sun');
-    } else {
-      lightLink.disabled = false;
-      darkLink.disabled  = true;
-      icon.classList.replace('fa-sun','fa-moon');
+    toggle.addEventListener('click', () => {
+        theme = (theme === 'light' ? 'dark' : 'light');
+        setTheme(theme);
+        localStorage.setItem('theme', theme);
+    });
+    function setTheme(mode) {
+        if (mode === 'dark') {
+            lightLink.disabled = true;
+            darkLink.disabled  = false;
+            icon.classList.replace('fa-moon','fa-sun');
+        } else {
+            lightLink.disabled = false;
+            darkLink.disabled  = true;
+            icon.classList.replace('fa-sun','fa-moon');
+        }
     }
-  }
 </script>
-
     {% block extra_js %}{% endblock %}
 </body>
 </html>

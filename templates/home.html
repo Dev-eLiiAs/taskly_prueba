@@ -276,16 +276,6 @@
         <small class="text-white-50">Revisar próximos eventos</small>
       </div>
     </a>
-
-    {% if session.role == 'Organizador' %}
-    <a class="action-btn btn btn-secondary d-flex align-items-center p-3 shadow-sm" href="{{ url_for('main.admin') }}">
-      <i class="fas fa-chart-line fa-2x me-3"></i>
-      <div>
-        <div class="fw-semibold mb-1">Panel Admin</div>
-        <small class="text-white-50">Estadísticas del sistema</small>
-      </div>
-    </a>
-    {% endif %}
   </div>
 </div>
 
