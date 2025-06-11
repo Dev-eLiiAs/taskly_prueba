@@ -1,0 +1,13 @@
+.stat-item {
+        text-align: center;
+        padding: 1rem;}
+
+.stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.25rem;}
+
+.stat-label {
+        color: #edf2f4;
+        font-size: 0.9rem;
+        margin-bottom: 0;}

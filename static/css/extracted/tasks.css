@@ -1,0 +1,178 @@
+.page-header {
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 20px 20px;}
+
+.tasks-container {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        margin-bottom: 2rem;}
+
+.filter-bar {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 1.5rem;
+        border: 1px solid #e9ecef;}
+
+.task-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+        border: 1px solid #e9ecef;
+        transition: all 0.3s ease;
+        position: relative;}
+
+.task-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        border-color: #dee2e6;}
+
+.task-card.priority-high {
+        border-left: 5px solid #dc3545;
+        background: linear-gradient(90deg, rgba(220, 53, 69, 0.05) 0%, white 10%);}
+
+.task-card.priority-medium {
+        border-left: 5px solid #ffc107;
+        background: linear-gradient(90deg, rgba(255, 193, 7, 0.05) 0%, white 10%);}
+
+.task-card.priority-low {
+        border-left: 5px solid #28a745;
+        background: linear-gradient(90deg, rgba(40, 167, 69, 0.05) 0%, white 10%);}
+
+.task-card.status-completed {
+        opacity: 0.7;
+        background: #f8f9fa;}
+
+.task-card.status-completed .task-title {
+        text-decoration: line-through;
+        color: #6c757d;}
+
+.task-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #2c3e50;}
+
+.task-description {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-bottom: 0.75rem;
+        line-height: 1.4;}
+
+.task-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: center;
+        font-size: 0.85rem;}
+
+.task-meta span {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;}
+
+.priority-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 15px;
+        font-weight: 600;
+        text-transform: uppercase;}
+
+.status-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 15px;
+        font-weight: 500;}
+
+.due-date {
+        color: #495057;}
+
+.due-date.urgent {
+        color: #dc3545;
+        font-weight: 600;}
+
+.due-date.soon {
+        color: #fd7e14;
+        font-weight: 500;}
+
+.task-actions {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;}
+
+.btn-task-action {
+        width: 35px;
+        height: 35px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 0.25rem;
+        font-size: 0.85rem;}
+
+.stats-row {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);}
+
+.filter-button {
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;}
+
+.empty-state {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: #6c757d;}
+
+.empty-state i {
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+        opacity: 0.5;}
+
+.bulk-actions {
+        background: #e3f2fd;
+        border: 1px solid #2196f3;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        display: none;}
+
+.bulk-actions.show {
+        display: block;}
+
+.task-checkbox {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        z-index: 2;}
+
+.task-card.selected {
+        background: #e3f2fd;
+        border-color: #2196f3;}
+
+@media (max-width: 768px) {
+        .task-actions {
+                position: static;
+                margin-top: 1rem;
+                display: flex;
+                justify-content: flex-end;
+        }
+
+        .task-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+        }
+
+        .filter-bar {
+                padding: 0.75rem;
+        }
+}

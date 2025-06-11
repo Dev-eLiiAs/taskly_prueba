@@ -1,0 +1,102 @@
+/* Contenedor principal */
+.calendar-container {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 1rem;
+  margin: 2rem auto;
+  max-width: 900px;
+}
+
+/* Toolbar */
+.fc .fc-toolbar {
+  background: #f8f9fa;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+}
+.fc .fc-toolbar-title {
+  color: #343a40;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.fc .fc-button {
+  background: #e9ecef;
+  border: none;
+  color: #495057;
+  border-radius: 4px;
+  padding: 0.3rem 0.8rem;
+  margin: 0 0.25rem;
+}
+.fc .fc-button:hover,
+.fc .fc-button:focus {
+  background: #dee2e6;
+  color: #212529;
+}
+
+/* Encabezados de días */
+.fc .fc-col-header-cell {
+  background: #e9ecef;
+  color: #495057;
+  font-weight: 600;
+  text-align: center;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #dee2e6;
+}
+
+/* Celdas del calendario */
+.fc .fc-daygrid-day {
+  background: #ffffff;
+  border: 1px solid #dee2e6;
+}
+.fc .fc-daygrid-day-frame {
+  padding: 0.6rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Número de día */
+.fc .fc-daygrid-day-number {
+  color: #495057;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+/* Día de hoy */
+.fc .fc-day-today {
+  background: #fff3cd !important;
+  border-color: #ffeeba !important;
+}
+
+/* Eventos dentro de la celda */
+.fc .fc-event {
+  background: #0d6efd !important;  /* azul bootstrap */
+  border: none !important;
+  color: #fff !important;
+  border-radius: 4px !important;
+  padding: 3px 6px !important;
+  font-size: 0.85rem !important;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Scroll si hay muchos eventos */
+.fc .fc-daygrid-day-frame .fc-scroller {
+  max-height: calc(100% - 1rem);
+  overflow-y: auto;
+}
+
+/* Eliminar líneas sobrantes */
+.fc .fc-scrollgrid thead,
+.fc .fc-scrollgrid tbody {
+  border: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .fc .fc-toolbar-title { font-size: 1.25rem; }
+  .fc .fc-daygrid-day-number { font-size: 0.85rem; }
+}
