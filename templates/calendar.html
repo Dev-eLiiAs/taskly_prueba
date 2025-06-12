@@ -1,15 +1,13 @@
 {% extends "base.html" %}
 
 {% block extra_css %}
-  <!-- FullCalendar CSS -->
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet" />
-  <!-- Tus overrides -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/calendar.css') }}">
 {% endblock %}
 
 {% block content %}
 <div class="container my-5">
-  <div class="calendar-container">
+  <div class="calendar-container text-primary-emphasis">
     <div id="calendar"></div>
   </div>
 </div>
