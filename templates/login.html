@@ -3,237 +3,112 @@
 {% block title %}Iniciar Sesión - Taskly{% endblock %}
 
 {% block extra_css %}
-
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/extracted/login.css') }}">
 {% endblock %}
 
 {% block content %}
 <div class="login-container">
-<!-- Header -->
-<div class="login-header">
-<div class="brand-logo">
-<i class="fas fa-tasks"></i>
-</div>
-<h1>Bienvenido a Taskly</h1>
-<p>Inicia sesión para gestionar tus tareas y eventos</p>
-</div>
-<!-- Login Form -->
-<form id="loginForm" method="POST" novalidate="">
-<!-- Username Field -->
-<div class="form-floating">
-<input autocomplete="username" class="form-control" id="username" name="username" placeholder="Usuario" required="" type="text" value="{{ request.form.username if request.form.username else '' }}"/>
-<label for="username">
-<i class="fas fa-user me-2"></i>Usuario
-            </label>
-<div class="invalid-feedback">
-                Por favor ingresa tu nombre de usuario
-            </div>
-</div>
-<!-- Password Field -->
-<div class="form-floating">
-<div class="input-group">
-<input autocomplete="current-password" class="form-control" id="password" name="password" placeholder="Contraseña" required="" type="password"/>
-<button aria-label="Mostrar contraseña" class="btn password-toggle" id="togglePassword" type="button">
-<i class="fas fa-eye"></i>
-</button>
-</div>
-<label for="password">
-<i class="fas fa-lock me-2"></i>Contraseña
-            </label>
-<div class="invalid-feedback">
-                Por favor ingresa tu contraseña
-            </div>
-</div>
-<!-- Remember Me -->
-<div class="form-check">
-<input class="form-check-input" id="rememberMe" name="remember_me" type="checkbox"/>
-<label class="form-check-label" for="rememberMe">
-                Recordar mi sesión
-            </label>
-</div>
-<!-- Submit Button -->
-<button class="btn btn-primary btn-login" id="loginBtn" type="submit">
-<span class="login-text">
-<i class="fas fa-sign-in-alt me-2"></i>
-                Iniciar Sesión
-            </span>
-<span class="loading-spinner">
-<span class="spinner-border spinner-border-sm me-2" role="status"></span>
-                Iniciando sesión...
-            </span>
-</button>
-</form>
-<!-- Demo Accounts -->
-<div class="demo-accounts">
-<strong><i class="fas fa-info-circle me-2"></i>Cuentas de Demostración:</strong>
-<div class="demo-account">
-<div>
-<div><strong>Organizador:</strong> admin / admin123</div>
-<small class="text-muted">Acceso completo al sistema</small>
-</div>
-<button class="btn btn-outline-primary btn-demo" onclick="fillDemoCredentials('admin', 'admin123')" type="button">
-                Usar
-            </button>
-</div>
-<div class="demo-account">
-<div>
-<div><strong>Participante:</strong> user1 / user123</div>
-<small class="text-muted">Acceso limitado</small>
-</div>
-<button class="btn btn-outline-secondary btn-demo" onclick="fillDemoCredentials('user1', 'user123')" type="button">
-                Usar
-            </button>
-</div>
-</div>
-<!-- Footer -->
-<div class="login-footer">
-<p class="mb-2">
-<a class="text-decoration-none" href="{{ url_for('auth.register') }}">
-<i class="fas fa-user-plus me-1"></i>¿No tienes cuenta? Regístrate
-            </a>
-</p>
-</div>
+  <div class="login-header text-center mb-4">
+    <div class="brand-logo mb-2"><i class="fas fa-tasks"></i></div>
+    <h1 class="text-primary">Bienvenido a Taskly</h1>
+    <p class="text-secondary">Inicia sesión para gestionar tus tareas y eventos</p>
+  </div>
+
+  <form id="loginForm" method="POST" novalidate>
+    <!-- Usuario -->
+    <div class="form-floating mb-3">
+      <input
+        autocomplete="username"
+        class="form-control user-field"
+        id="username"
+        name="username"
+        placeholder="Usuario"
+        required
+        type="text"
+        value="{{ request.form.username or '' }}"
+      />
+      <label for="username"><i class="fas fa-user me-2"></i>Usuario</label>
+      <div class="invalid-feedback">Por favor ingresa tu nombre de usuario</div>
+    </div>
+
+    <!-- Contraseña -->
+    <div class="mb-3">
+      <label for="password" class="form-label text-dark">
+        <i class="fas fa-lock me-2"></i>Contraseña
+      </label>
+      <div class="input-group">
+        <input
+          type="password"
+          class="form-control password-field"
+          id="password"
+          name="password"
+          placeholder=""
+          autocomplete="current-password"
+          required
+        />
+        <button
+          type="button"
+          class="btn password-toggle"
+          id="togglePassword"
+          aria-label="Mostrar / ocultar contraseña"
+        >
+          <i class="fas fa-eye"></i>
+        </button>
+      </div>
+      <div class="invalid-feedback">Por favor ingresa tu contraseña</div>
+    </div>
+
+    <!-- Recordar sesión -->
+    <div class="form-check mb-3">
+      <input class="form-check-input" id="rememberMe" name="remember_me" type="checkbox" />
+      <label class="form-check-label text-secondary" for="rememberMe">Recordar mi sesión</label>
+    </div>
+
+    <!-- Botón Iniciar Sesión -->
+    <button class="btn btn-login w-100" id="loginBtn" type="submit">
+      <span class="login-text"><i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión</span>
+      <span class="loading-spinner">
+        <span class="spinner-border spinner-border-sm me-2" role="status"></span>Iniciando sesión...
+      </span>
+    </button>
+  </form>
+
+  <!-- Cuentas de demostración -->
+  <div class="demo-accounts mt-4 text-secondary">
+    <strong><i class="fas fa-info-circle me-2"></i>Cuentas de Demostración:</strong>
+    <div class="demo-account d-flex justify-content-between align-items-center py-2 border-bottom">
+      <div>
+        <strong>Organizador:</strong> admin / admin123<br>
+        <small class="text-muted">Acceso completo al sistema</small>
+      </div>
+      <button class="btn btn-outline-primary btn-demo" onclick="fillDemoCredentials('admin','admin123')">Usar</button>
+    </div>
+    <div class="demo-account d-flex justify-content-between align-items-center py-2">
+      <div>
+        <strong>Participante:</strong> user1 / user123<br>
+        <small class="text-muted">Acceso limitado</small>
+      </div>
+      <button class="btn btn-outline-primary btn-demo" onclick="fillDemoCredentials('user1','user123')">Usar</button>
+    </div>
+  </div>
+
+  <div class="login-footer text-center mt-4 pt-3 border-top">
+    <a href="{{ url_for('auth.register') }}" class="text-decoration-none">
+      <i class="fas fa-user-plus me-1"></i>¿No tienes cuenta? Regístrate
+    </a>
+  </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-$(document).ready(function() {
-    const usernameField = $('#username');
-    const passwordField = $('#password');
-    const loginBtn = $('#loginBtn');
-    const loginForm = $('#loginForm');
-    
-    // Validate fields and enable/disable button
-    function validateFields() {
-        const username = usernameField.val().trim();
-        const password = passwordField.val().trim();
-        
-        if (username && password) {
-            loginBtn.prop('disabled', false);
-        } else {
-            loginBtn.prop('disabled', true);
-        }
-    }
-    
-    // Real-time validation
-    usernameField.on('input', validateFields);
-    passwordField.on('input', validateFields);
-    
-    // Initial validation
-    validateFields();
-    
-    // Password toggle functionality
-    $('#togglePassword').click(function() {
-        const password = $('#password');
-        const icon = $(this).find('i');
-        
-        if (password.attr('type') === 'password') {
-            password.attr('type', 'text');
-            icon.removeClass('fa-eye').addClass('fa-eye-slash');
-            $(this).attr('aria-label', 'Ocultar contraseña');
-        } else {
-            password.attr('type', 'password');
-            icon.removeClass('fa-eye-slash').addClass('fa-eye');
-            $(this).attr('aria-label', 'Mostrar contraseña');
-        }
-    });
-    
-    // Form submission with loading state
-    loginForm.submit(function(e) {
-        if (!loginForm[0].checkValidity()) {
-            e.preventDefault();
-            e.stopPropagation();
-            loginForm.addClass('was-validated');
-            return;
-        }
-        
-        // Show loading state
-        const loginText = $('.login-text');
-        const loadingSpinner = $('.loading-spinner');
-        
-        loginBtn.prop('disabled', true);
-        loginText.hide();
-        loadingSpinner.show();
-        
-        // Show loading overlay
-        showLoading();
-    });
-    
-    // Focus on username field
-    usernameField.focus();
-    
-    // Handle Enter key
-    passwordField.keypress(function(e) {
-        if (e.which === 13 && !loginBtn.prop('disabled')) {
-            loginForm.submit();
-        }
-    });
-    
-    // Clear validation on input
-    $('.form-control').on('input', function() {
-        $(this).removeClass('is-invalid');
-        loginForm.removeClass('was-validated');
-    });
-});
-
-// Fill demo credentials function
-function fillDemoCredentials(username, password) {
-    $('#username').val(username);
-    $('#password').val(password);
-    
-    // Trigger validation
-    $('#username').trigger('input');
-    $('#password').trigger('input');
-    
-    // Focus on login button
-    $('#loginBtn').focus();
-    
-    // Show a tooltip or highlight
-    const btn = event.target;
-    $(btn).text('¡Listo!').addClass('btn-success');
-    setTimeout(() => {
-        $(btn).text('Usar').removeClass('btn-success').addClass('btn-outline-primary');
-    }, 1000);
-}
-
-// Show loading function (if not defined in base.html)
-function showLoading() {
-    // This should be defined in base.html, but as fallback:
-    console.log('Loading...');
-}
-
-// Keyboard shortcuts
-$(document).keydown(function(e) {
-    // Alt + D = Demo admin account
-    if (e.altKey && e.which === 68) {
-        e.preventDefault();
-        fillDemoCredentials('admin', 'admin123');
-    }
-    
-    // Alt + U = Demo user account  
-    if (e.altKey && e.which === 85) {
-        e.preventDefault();
-        fillDemoCredentials('user1', 'user123');
-    }
-});
-
-// Auto-fill from localStorage (remember me functionality)
-$(document).ready(function() {
-    const rememberedUsername = localStorage.getItem('taskly_username');
-    if (rememberedUsername && !$('#username').val()) {
-        $('#username').val(rememberedUsername);
-        $('#rememberMe').prop('checked', true);
-        $('#password').focus();
-    }
-    
-    // Save username when form is submitted with remember me checked
-    $('#loginForm').submit(function() {
-        if ($('#rememberMe').is(':checked')) {
-            localStorage.setItem('taskly_username', $('#username').val());
-        } else {
-            localStorage.removeItem('taskly_username');
-        }
-    });
-});
+  const toggle = document.getElementById('togglePassword');
+  const pwd    = document.getElementById('password');
+  toggle.addEventListener('click', () => {
+    const isPassword = pwd.getAttribute('type') === 'password';
+    pwd.setAttribute('type', isPassword ? 'text' : 'password');
+    toggle.querySelector('i').classList.toggle('fa-eye');
+    toggle.querySelector('i').classList.toggle('fa-eye-slash');
+  });
 </script>
 {% endblock %}

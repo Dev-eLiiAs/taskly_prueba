@@ -1,58 +1,82 @@
 :root {
-  --bg: #eef6f9;
-  --fg: #212529;
-  --card-bg: #ffffffcc;
-  --card-border: #dde5ea;
-  --header-bg: #e1eff4;
-  --btn-bg: #f0fbff;
-  --btn-border: #c1d7e2;
-  --primary: #0d6efd;
+  --bg-page:        #f5f7fa;
+  --bg-container:   #ffffff;
+  --text-primary:   #212529;
+  --text-secondary: #495057;
+  --text-muted:     #6c757d;
+  --color-primary:       #4a90e2;
+  --color-primary-hover: #357ab8;
+  --border-color:  #dee2e6;
+  --input-bg:      #ffffff;
+  --input-text:    #212529;
+  --input-border:  var(--border-color);
+  --input-focus:   rgba(74, 144, 226, 0.25);
+  --shadow-small:  0 1px 3px rgba(0,0,0,0.1);
+  --shadow-medium: 0 4px 6px rgba(0,0,0,0.1);
 }
+
 body {
-  background-color: var(--bg);
-  color: var(--fg);
+  background-color: var(--bg-page) !important;
+  color: var(--text-primary) !important;
 }
-/* Mejora títulos de sección */
-.section-title,
-h2.section-title,
-h3.section-title {
-  color: var(--primary) !important;
+
+a {
+  color: var(--color-primary) !important;
 }
-/* Tarjetas y contenedores */
-.card, .container, .calendar-container,
-.quick-actions, .calendar-widget,
-.tasks-list .task-item, .event-detail-card,
-.task-card {
-  background-color: var(--card-bg) !important;
-  border: 1px solid var(--card-border) !important;
+a:hover {
+  color: var(--color-primary-hover) !important;
 }
-/* Encabezados */
-.card-header {
-  background-color: var(--header-bg) !important;
-  color: var(--fg) !important;
-  border-bottom: 1px solid var(--card-border) !important;
+
+.navbar-light {
+  background-color: var(--bg-container) !important;
+  box-shadow: var(--shadow-small);
 }
-/* Botones claros */
-.btn-light, .btn-outline-light {
-  background-color: var(--btn-bg) !important;
-  color: var(--fg) !important;
-  border: 1px solid var(--btn-border) !important;
+.navbar-light .nav-link {
+  color: var(--text-secondary) !important;
 }
-/* Quick Actions */
-.action-btn.btn {
-  background-color: #f7fcff !important;
-  color: var(--fg) !important;
+.navbar-light .nav-link.active,
+.navbar-light .nav-link:hover {
+  color: var(--color-primary) !important;
 }
-/* FullCalendar */
-.fc .fc-toolbar, .fc .fc-col-header-cell, .fc .fc-daygrid-day {
-  background: var(--btn-bg) !important;
-  color: var(--fg) !important;
-  border-color: var(--card-border) !important;
+
+.container,
+.card,
+footer,
+.dropdown-menu {
+  background-color: var(--bg-container) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
 }
-/* Listados */
-.tasks-list .task-item:hover { background-color: #eaf6fc !important; }
-/* Formularios */
-.form-control, .form-select {
-  background-color: #ffffffcc !important;
-  border: 1px solid var(--card-border) !important;
+
+.btn-primary {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+}
+.btn-primary:hover {
+  background-color: var(--color-primary-hover) !important;
+  border-color: var(--color-primary-hover) !important;
+}
+
+.form-control,
+.form-select {
+  background-color: var(--input-bg) !important;
+  color: var(--input-text) !important;
+  border: 1px solid var(--input-border) !important;
+}
+.form-control:focus,
+.form-select:focus {
+  box-shadow: 0 0 0 .2rem var(--input-focus) !important;
+  border-color: var(--color-primary) !important;
+}
+
+.alert {
+  border-radius: .375rem;
+}
+
+footer {
+  background-color: var(--bg-container) !important;
+}
+
+body, .container, .card, .navbar, footer {
+  transition: background-color .3s, color .3s;
 }

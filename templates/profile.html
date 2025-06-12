@@ -26,10 +26,10 @@
   <div class="container">
     <div class="row align-items-center">
       <div class="col-md-8">
-        <h1 class="mb-1">
-          <i class="fas fa-user-circle me-2"></i>Mi Perfil
+        <h1 class="mb-1 text-primary-emphasis">
+          <i class="fas fa-user-circle me-2 text-primary"></i>Mi Perfil
         </h1>
-        <p class="mb-0 opacity-75">
+        <p class="mb-0 opacity-75 text-dark">
           Gestiona tu información personal y preferencias
         </p>
       </div>
@@ -38,7 +38,7 @@
           <button class="btn btn-light" onclick="toggleEditMode()" type="button">
             <i class="fas fa-edit me-1"></i>Editar Perfil
           </button>
-          <a class="btn btn-outline-light" href="{{ url_for('auth.change_password') }}">
+          <a class="btn btn-light" href="{{ url_for('auth.change_password') }}">
             <i class="fas fa-key me-1"></i>Cambiar Contraseña
           </a>
         </div>
@@ -56,7 +56,7 @@
           {% set first_letter = session.full_name[0].upper() if session.full_name else 'U' %}
           {{ first_letter }}
         </div>
-        <div id="profileView" class="profile-view">
+        <div id="profileView" class="profile-view text-primary-emphasis">
           <h3 class="profile-name">{{ session.full_name }}</h3>
           <div class="profile-role">{{ session.role }}</div>
           <p class="text-muted">{{ session.get('email', '') }}</p>
@@ -85,7 +85,7 @@
         </div>
         <!-- Logros -->
         <div class="mt-3">
-          <h6 class="mb-2"><i class="fas fa-trophy me-2 text-warning"></i>Logros</h6>
+          <h6 class="mb-2 text-secondary"><i class="fas fa-trophy me-2 text-warning "></i>Logros</h6>
           {% if stats.completed_tasks >= 10 %}
             <span class="achievement-badge"><i class="fas fa-star me-1"></i>Productivo</span>
           {% endif %}
@@ -102,8 +102,8 @@
     <!-- Columna derecha: estadísticas -->
     <div class="col-lg-8">
       {% set productivity = stats.total_tasks > 0 and (stats.completed_tasks / stats.total_tasks * 100) | round(0) | int or 0 %}
-      <div class="profile-stats">
-        <h6 class="mb-3"><i class="fas fa-chart-line me-2"></i>Mis Estadísticas</h6>
+      <div class="profile-stats text-gradient-primary">
+        <h6 class="mb-3"><i class="fas fa-chart-line me-2 text-primary"></i>Mis Estadísticas</h6>
         <div class="row">
           <div class="col-6">
             <div class="stat-item"><div class="stat-number text-primary">{{ stats.total_tasks }}</div><p class="stat-label">Tareas Totales</p></div>
@@ -120,7 +120,7 @@
         </div>
       </div>
       <div class="progress-container mt-4">
-        <div class="progress-label d-flex justify-content-between"><span>Progreso del Mes</span><span>{{ productivity }}%</span></div>
+        <div class="progress-label d-flex justify-content-between text-secondary"><span>Progreso del Mes</span><span>{{ productivity }}%</span></div>
         <div class="progress">
           <div class="progress-bar bg-success" style="width: {{ productivity }}%;"></div>
         </div>

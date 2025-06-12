@@ -1,196 +1,282 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}Taskly - Gestión de Tareas y Eventos{% endblock %}</title>
 
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
   <!-- Font Awesome -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    rel="stylesheet"
+  />
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
   <!-- Favicon -->
-  <link href="{{ url_for('static', filename='images/favicon.ico') }}" rel="icon" type="image/x-icon" />
+  <link
+    href="{{ url_for('static', filename='images/favicon.ico') }}"
+    rel="icon"
+    type="image/x-icon"
+  />
 
   <!-- Common CSS -->
-  <link href="{{ url_for('static', filename='css/extracted/common.css') }}" rel="stylesheet" type="text/css" />
-  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" />
+  <link
+    href="{{ url_for('static', filename='css/extracted/common.css') }}"
+    rel="stylesheet"
+    type="text/css"
+  />
+  <link
+    href="{{ url_for('static', filename='css/style.css') }}"
+    rel="stylesheet"
+  />
 
+  <!-- Solo tema claro -->
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/light_theme.css') }}"
+    id="light-theme"
+  />
+
+  <!-- CSS específico de cada plantilla -->
   {% block extra_css %}{% endblock %}
-
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/light_theme.css') }}" id="light-theme">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/dark_theme.css') }}" id="dark-theme" disabled>
 </head>
-
 <body>
-    <!-- Navigation Bar -->
-    {% if current_user %}
+
+  {% if current_user %}
+    <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
-        <div class="container-fluid">
-            <!-- Brand -->
-            <a class="navbar-brand fw-bold" href="{{ url_for('main.home') }}">
-                <i class="fas fa-tasks me-2"></i>Taskly
-            </a>
-            <!-- Mobile Toggle -->
-            <button class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- Left Menu -->
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link {{ 'active' if request.endpoint == 'main.home' }}" href="{{ url_for('main.home') }}">
-                            <i class="fas fa-home me-1"></i>Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ 'active' if 'tasks' in request.endpoint }}" href="{{ url_for('tasks.tasks') }}">
-                            <i class="fas fa-list-check me-1"></i>Tareas
-                            {% if task_counts and task_counts.urgent > 0 %}
-                            <span class="badge bg-danger ms-1">{{ task_counts.urgent }}</span>
-                            {% endif %}
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ 'active' if 'events' in request.endpoint or 'calendar' in request.endpoint }}" href="{{ url_for('events.event_calendar') }}">
-                            <i class="fas fa-calendar-alt me-1"></i>Calendario
-                            {% if event_counts and event_counts.today > 0 %}
-                            <span class="badge bg-warning ms-1">{{ event_counts.today }}</span>
-                            {% endif %}
-                        </a>
-                    </li>
-                </ul>
-                <!-- Notifications & User -->
-                <ul class="navbar-nav">
-                    <!-- Notifications Dropdown -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle position-relative" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-bell"></i>
-                            <span id="notification-count" class="badge bg-danger position-absolute top-0 start-100 translate-middle" style="display:none;"></span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" style="width:300px;" id="notifications-container">
-                            <li><h6 class="dropdown-header"><i class="fas fa-bell me-2"></i>Notificaciones</h6></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><span class="dropdown-item-text text-muted">Cargando notificaciones...</span></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-center" href="{{ url_for('main.notifications') }}">Ver todas las notificaciones</a></li>
-                        </ul>
-                    </li>
-
-                    <!-- User Menu -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-circle me-1"></i>{{ current_user.full_name }} <small class="text-white-50">({{ current_user.role }})</small>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li class="dropdown-header">
-                                <i class="fas fa-user me-2"></i>{{ current_user.full_name }}<br><small class="text-muted">{{ current_user.email }}</small>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{{ url_for('main.profile') }}"><i class="fas fa-user-edit me-2"></i>Mi Perfil</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('auth.change_password') }}"><i class="fas fa-key me-2"></i>Cambiar Contraseña</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+      <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="{{ url_for('main.home') }}">
+          <i class="fas fa-tasks me-2"></i>Taskly
+        </a>
+        <button
+          class="navbar-toggler"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          type="button"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a
+                class="nav-link {{ 'active' if request.endpoint=='main.home' }}"
+                href="{{ url_for('main.home') }}"
+              >
+                <i class="fas fa-home me-1"></i>Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {{ 'active' if 'tasks' in request.endpoint }}"
+                href="{{ url_for('tasks.tasks') }}"
+              >
+                <i class="fas fa-list-check me-1"></i>Tareas
+                {% if task_counts and task_counts.urgent>0 %}
+                  <span class="badge bg-danger ms-1">{{ task_counts.urgent }}</span>
+                {% endif %}
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {{ 'active' if 'events' in request.endpoint or 'calendar' in request.endpoint }}"
+                href="{{ url_for('events.event_calendar') }}"
+              >
+                <i class="fas fa-calendar-alt me-1"></i>Calendario
+                {% if event_counts and event_counts.today>0 %}
+                  <span class="badge bg-warning ms-1">{{ event_counts.today }}</span>
+                {% endif %}
+              </a>
+            </li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle position-relative"
+                href="#"
+                data-bs-toggle="dropdown"
+              >
+                <i class="fas fa-bell"></i>
+                <span
+                  id="notification-count"
+                  class="badge bg-danger position-absolute top-0 start-100 translate-middle"
+                  style="display:none;"
+                ></span>
+              </a>
+              <ul
+                class="dropdown-menu dropdown-menu-end"
+                style="width:300px;"
+                id="notifications-container"
+              >
+                <li>
+                  <h6 class="dropdown-header">
+                    <i class="fas fa-bell me-2"></i>Notificaciones
+                  </h6>
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <span class="dropdown-item-text text-muted"
+                    >Cargando notificaciones...</span
+                  >
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a
+                    class="dropdown-item text-center"
+                    href="{{ url_for('main.notifications') }}"
+                    >Ver todas las notificaciones</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                data-bs-toggle="dropdown"
+              >
+                <i class="fas fa-user-circle me-1"></i
+                >{{ current_user.full_name }}
+                <small class="text-white-50">({{ current_user.role }})</small>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li class="dropdown-header">
+                  <i class="fas fa-user me-2"></i>{{ current_user.full_name
+                  }}<br /><small class="text-muted">{{ current_user.email }}</small>
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="{{ url_for('main.profile') }}"
+                  ><i class="fas fa-user-edit me-2"></i>Mi Perfil</a>
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="{{ url_for('auth.change_password') }}"
+                  ><i class="fas fa-key me-2"></i>Cambiar Contraseña</a>
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a
+                    class="dropdown-item text-danger"
+                    href="{{ url_for('auth.logout') }}"
+                  ><i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
+      </div>
     </nav>
-    {% endif %}
 
-    <!-- Flash Messages -->
+    <!-- Flash messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    <div class="container mt-3">
-        {% for category, message in messages %}
-            {% set alert_type = {'error':'danger','info':'info','warning':'warning'}.get(category, 'success') %}
-            {% set alert_icon = {'error':'exclamation-triangle','info':'info-circle','warning':'exclamation-circle'}.get(category, 'check-circle') %}
-            <div class="alert alert-{{ alert_type }} alert-dismissible fade show" role="alert">
-                <i class="fas fa-{{ alert_icon }} me-2"></i>
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      {% if messages %}
+        <div class="container mt-3">
+          {% for category, message in messages %}
+            {% set alert_type = {
+              'error':'danger',
+              'info':'info',
+              'warning':'warning'
+            }.get(category,'success') %}
+            {% set alert_icon = {
+              'error':'exclamation-triangle',
+              'info':'info-circle',
+              'warning':'exclamation-circle'
+            }.get(category,'check-circle') %}
+            <div
+              class="alert alert-{{ alert_type }} alert-dismissible fade show"
+              role="alert"
+            >
+              <i class="fas fa-{{ alert_icon }} me-2"></i>{{ message }}
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"
+              ></button>
             </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-    {% endwith %}
-
-    <!-- Main Content -->
-    <main class="mt-4">
-        {% block content %}{% endblock %}
-    </main>
-
-    <!-- Footer -->
-    {% if current_user %}
-    <footer class="bg-light text-center text-muted py-4 mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 text-md-start">
-                    <p class="mb-0"><strong>Taskly</strong> - Gestión de Tareas y Eventos</p>
-                    <small>Versión 1.0.0 | Desarrollado con Python y Flask</small>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <div class="d-flex justify-content-md-end gap-3">
-                        <a class="text-decoration-none" href="{{ url_for('tasks.export_tasks') }}"><i class="fas fa-download me-1"></i>Exportar</a>
-                    </div>
-                </div>
-            </div>
+          {% endfor %}
         </div>
-    </footer>
-    {% endif %}
+      {% endif %}
+    {% endwith %}
+  {% endif %}
 
-    <!-- Floating Action Button -->
-    {% if current_user %}
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="mt-4">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% if current_user %}
+    <!-- FOOTER -->
+    <footer class="bg-light text-center text-muted py-4 mt-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 text-md-start">
+            <p class="mb-0"><strong>Taskly</strong> - Gestión de Tareas y Eventos</p>
+            <small>Versión 1.0.0 | Desarrollado con Python y Flask</small>
+          </div>
+          <div class="col-md-6 text-md-end">
+            <div class="d-flex justify-content-md-end gap-3">
+              <a
+                class="text-decoration-none"
+                href="{{ url_for('tasks.export_tasks') }}"
+                ><i class="fas fa-download me-1"></i>Exportar</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- FAB -->
     <div class="fab-container">
-        <div class="fab-button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-plus"></i></div>
-        <ul class="dropdown-menu dropdown-menu-end mb-2">
-            <li><a class="dropdown-item" href="{{ url_for('tasks.add_task') }}"><i class="fas fa-tasks text-primary me-2"></i>Nueva Tarea</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('events.add_event') }}"><i class="fas fa-calendar-plus text-success me-2"></i>Nuevo Evento</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{{ url_for('tasks.urgent_tasks') }}"><i class="fas fa-exclamation-triangle text-warning me-2"></i>Tareas Urgentes</a></li>
-        </ul>
+      <div class="fab-button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-plus"></i>
+      </div>
+      <ul class="dropdown-menu dropdown-menu-end mb-2">
+        <li>
+          <a
+            class="dropdown-item"
+            href="{{ url_for('tasks.add_task') }}"
+            ><i class="fas fa-tasks text-primary me-2"></i>Nueva Tarea</a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            href="{{ url_for('events.add_event') }}"
+            ><i class="fas fa-calendar-plus text-success me-2"></i>Nuevo Evento</a>
+        </li>
+        <li><hr class="dropdown-divider" /></li>
+        <li>
+          <a
+            class="dropdown-item"
+            href="{{ url_for('tasks.urgent_tasks') }}"
+            ><i class="fas fa-exclamation-triangle text-warning me-2"></i>Tareas Urgentes</a>
+        </li>
+      </ul>
     </div>
-    {% endif %}
 
     <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loading-overlay" style="display:none;">
-        <!-- tu overlay aquí -->
-    </div>
+    <div class="loading-overlay" id="loading-overlay" style="display:none;"></div>
+  {% endif %}
 
-    <!-- Bootstrap & jQuery -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Main JS -->
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
-  <script>
-    const lightLink = document.getElementById('light-theme');
-    const darkLink = document.getElementById('dark-theme');
-    const toggle    = document.getElementById('theme-toggle');
-    const icon      = document.getElementById('theme-icon');
-    let theme = 'light';
-    setTheme(theme);
-    toggle.addEventListener('click', () => {
-        theme = (theme === 'light' ? 'dark' : 'light');
-        setTheme(theme);
-        localStorage.setItem('theme', theme);
-    });
-    function setTheme(mode) {
-        if (mode === 'dark') {
-            lightLink.disabled = true;
-            darkLink.disabled  = false;
-            icon.classList.replace('fa-moon','fa-sun');
-        } else {
-            lightLink.disabled = false;
-            darkLink.disabled  = true;
-            icon.classList.replace('fa-sun','fa-moon');
-        }
-    }
-</script>
-    {% block extra_js %}{% endblock %}
+  {% block extra_js %}{% endblock %}
 </body>
 </html>

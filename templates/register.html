@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}Regístrate - Taskly{% endblock %}
+
+{% block extra_css %}
+  <!-- Reutilizamos login.css para el estilo del formulario -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/extracted/login.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+  <div class="login-header text-center mb-4">
+    <div class="brand-logo mb-2"><i class="fas fa-user-plus"></i></div>
+    <h1>Crea tu cuenta</h1>
+    <p>Empieza a gestionar tus tareas y eventos</p>
+  </div>
+
+      <form id="registerForm" method="POST" novalidate>
+    <!-- Nombre completo -->
+    <div class="form-floating mb-3">
+      <input
+        type="text"
+        class="form-control user-field"
+        id="fullName"
+        name="full_name"
+        placeholder="Nombre completo"
+        required
+        value="{{ request.form.full_name or '' }}"
+      />
+      <label for="fullName"><i class="fas fa-id-card me-2"></i>Nombre completo</label>
+      <div class="invalid-feedback">Por favor ingresa tu nombre completo</div>
+    </div>
+
+    <!-- Correo electrónico -->
+    <div class="form-floating mb-3">
+      <input
+        type="email"
+        class="form-control user-field"
+        id="email"
+        name="email"
+        placeholder="Correo electrónico"
+        required
+        value="{{ request.form.email or '' }}"
+      />
+      <label for="email"><i class="fas fa-envelope me-2"></i>Correo electrónico</label>
+      <div class="invalid-feedback">Por favor ingresa un correo válido</div>
+    </div>
+
+    <!-- Nombre de usuario -->
+    <div class="form-floating mb-3">
+      <input
+        type="text"
+        class="form-control user-field"
+        id="username"
+        name="username"
+        placeholder="Usuario"
+        required
+        value="{{ request.form.username or '' }}"
+      />
+      <label for="username"><i class="fas fa-user me-2"></i>Usuario</label>
+      <div class="invalid-feedback">Por favor elige un nombre de usuario</div>
+    </div>
+
+    <!-- Contraseña -->
+    <div class="mb-3">
+      <label for="password" class="form-label text-dark">
+        <i class="fas fa-lock me-2"></i>Contraseña
+      </label>
+      <div class="input-group">
+        <input
+          type="password"
+          class="form-control password-field"
+          id="password"
+          name="password"
+          placeholder=""
+          required
+        />
+        <button
+          type="button"
+          class="btn password-toggle"
+          id="togglePassword"
+          aria-label="Mostrar / ocultar contraseña"
+        >
+          <i class="fas fa-eye"></i>
+        </button>
+      </div>
+      <div class="invalid-feedback">Por favor ingresa una contraseña</div>
+    </div>
+
+    <!-- Confirmar contraseña -->
+    <div class="mb-4">
+      <label for="password2" class="form-label text-dark">
+        <i class="fas fa-lock me-2"></i>Repite la contraseña
+      </label>
+      <div class="input-group">
+        <input
+          type="password"
+          class="form-control password-field"
+          id="password2"
+          name="password2"
+          placeholder=""
+          required
+        />
+        <button
+          type="button"
+          class="btn password-toggle"
+          id="togglePassword2"
+          aria-label="Mostrar / ocultar contraseña"
+        >
+          <i class="fas fa-eye"></i>
+        </button>
+      </div>
+      <div class="invalid-feedback">Las contraseñas deben coincidir</div>
+    </div>
+
+    <button class="btn btn-login w-100" type="submit">
+      <span class="login-text"><i class="fas fa-user-plus me-2"></i>Registrarme</span>
+    </button>
+  </form>
+
+  <div class="login-footer text-center mt-4 pt-3 border-top">
+    <p>¿Ya tienes cuenta? 
+      <a href="{{ url_for('auth.login') }}" class="text-decoration-none">
+        Inicia sesión
+      </a>
+    </p>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Toggle para el primer password
+  const toggle1 = document.getElementById('togglePassword');
+  const pwd1    = document.getElementById('password');
+  toggle1.addEventListener('click', () => {
+    const type = pwd1.getAttribute('type') === 'password' ? 'text' : 'password';
+    pwd1.setAttribute('type', type);
+    toggle1.querySelector('i').classList.toggle('fa-eye');
+    toggle1.querySelector('i').classList.toggle('fa-eye-slash');
+  });
+
+  // Toggle para el segundo password
+  const toggle2 = document.getElementById('togglePassword2');
+  const pwd2    = document.getElementById('password2');
+  toggle2.addEventListener('click', () => {
+    const type = pwd2.getAttribute('type') === 'password' ? 'text' : 'password';
+    pwd2.setAttribute('type', type);
+    toggle2.querySelector('i').classList.toggle('fa-eye');
+    toggle2.querySelector('i').classList.toggle('fa-eye-slash');
+  });
+</script>
+{% endblock %}

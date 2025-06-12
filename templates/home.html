@@ -11,11 +11,11 @@
 <div class="container">
 <div class="row align-items-center">
 <div class="col-md-8">
-<h1 class="welcome-text">
+<h1 class="welcome-text text-primary">
                     ¡Hola, {{ session.full_name.split()[0] }}! 👋
                 </h1>
-<p class="welcome-subtitle">
-<i class="fas fa-calendar-day me-2"></i>
+<p class="welcome-subtitle text-secondary">
+<i class="fas fa-calendar-day me-2 text-gradient-primary" ></i>
                     Hoy es un gran día para ser productivo
                 </p>
 </div>
@@ -62,7 +62,7 @@
 <i class="fas fa-tasks"></i>
 </div>
 <div class="stats-number text-primary">{{ task_stats.total }}</div>
-<p class="stats-label">Total de Tareas</p>
+<p class="stats-label text-secondary">Total de Tareas</p>
 <div class="progress progress-thin">
 <div class="progress-bar bg-primary" data-completed="{{ task_stats.completed }}" data-total="{{ task_stats.total }}" id="completion-progress"></div>
 </div>
@@ -75,7 +75,7 @@
 <i class="fas fa-clock"></i>
 </div>
 <div class="stats-number text-warning">{{ task_stats.pending }}</div>
-<p class="stats-label">Tareas Pendientes</p>
+<p class="stats-label text-secondary">Tareas Pendientes</p>
                 {% if task_stats.urgent > 0 %}
                 <div class="mt-2">
 <span class="badge bg-danger">{{ task_stats.urgent }} urgentes</span>
@@ -89,7 +89,7 @@
 <i class="fas fa-calendar-check"></i>
 </div>
 <div class="stats-number text-success">{{ upcoming_events|length }}</div>
-<p class="stats-label">Eventos Próximos</p>
+<p class="stats-label text-secondary">Eventos Próximos</p>
                 {% if this_week_events %}
                 <small class="text-muted">{{ this_week_events|length }} esta semana</small>
                 {% endif %}
@@ -101,7 +101,7 @@
 <i class="fas fa-chart-line"></i>
 </div>
 <div class="stats-number text-info" data-completed="{{ task_stats.completed }}" data-total="{{ task_stats.total }}" id="productivity-percent">0%</div>
-<p class="stats-label">Productividad</p>
+<p class="stats-label text-secondary">Productividad</p>
 <small class="text-muted" id="productivity-text">Crea tu primera tarea</small>
 </div>
 </div>
@@ -110,7 +110,7 @@
 <!-- Tareas Recientes -->
 <div class="col-lg-6 mb-4">
 <div class="d-flex justify-content-between align-items-center mb-3">
-<h3 class="section-title">
+<h3 class="section-title text-gradient-primary">
 <i class="fas fa-list-check me-2 text-primary"></i>
                     Tareas Recientes
                 </h3>
@@ -184,8 +184,8 @@
 <!-- Eventos Próximos -->
 <div class="col-lg-6 mb-4">
 <div class="d-flex justify-content-between align-items-center mb-3">
-<h3 class="section-title">
-<i class="fas fa-calendar-alt me-2 text-success"></i>
+<h3 class="section-title text-success">
+<i class="fas fa-calendar-alt me-2 "></i>
                     Próximos Eventos
                 </h3>
 <a class="btn btn-outline-success btn-sm" href="{{ url_for('events.event_calendar') }}">
@@ -240,8 +240,8 @@
 
 <div class="col-lg-4 mb-4">
   <div class="quick-actions d-grid gap-3">
-    <h4 class="section-title d-flex align-items-center mb-3">
-      <i class="fas fa-bolt me-2 text-warning"></i>
+    <h4 class="section-title d-flex align-items-center mb-3 text-warning">
+      <i class="fas fa-bolt me-2 "></i>
       Acciones Rápidas
     </h4>
 
@@ -283,8 +283,8 @@
 <!-- Calendario  -->
 <div class="col-lg-8 mb-4">
 <div class="calendar-widget">
-<h4 class="section-title">
-<i class="fas fa-calendar me-2 text-primary"></i>
+<h4 class="section-title text-danger">
+<i class="fas fa-calendar me-2 "></i>
                     Vista Rápida del Mes
                 </h4>
 <div class="row text-center mb-3">
@@ -370,26 +370,26 @@
 <div class="row">
 <div class="col-12">
 <div class="stats-card">
-<h4 class="section-title">
-<i class="fas fa-chart-bar me-2 text-info"></i>
+<h4 class="section-title text-info">
+<i class="fas fa-chart-bar me-2"></i>
                     Resumen de la Semana
                 </h4>
 <div class="row text-center">
 <div class="col-md-3">
 <div class="stats-number text-primary">{{ task_stats.total }}</div>
-<p class="stats-label">Tareas Totales</p>
+<p class="stats-label text-secondary">Tareas Totales</p>
 </div>
 <div class="col-md-3">
 <div class="stats-number text-success">{{ task_stats.completed }}</div>
-<p class="stats-label">Completadas</p>
+<p class="stats-label text-secondary">Completadas</p>
 </div>
 <div class="col-md-3">
 <div class="stats-number text-warning">{{ task_stats.pending }}</div>
-<p class="stats-label">Pendientes</p>
+<p class="stats-label text-secondary">Pendientes</p>
 </div>
 <div class="col-md-3">
 <div class="stats-number text-info">{{ upcoming_events|length }}</div>
-<p class="stats-label">Eventos Próximos</p>
+<p class="stats-label text-secondary">Eventos Próximos</p>
 </div>
 </div>
 

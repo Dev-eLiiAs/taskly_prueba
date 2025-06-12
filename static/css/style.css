@@ -8,20 +8,20 @@
     --info-color: #17a2b8;
     --light-color: #f8f9fa;
     --dark-color: #343a40;
-    
+
     --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     --gradient-success: linear-gradient(135deg, #28a745 0%, #20c997 100%);
     --gradient-warning: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
     --gradient-danger: linear-gradient(135deg, #dc3545 0%, #e83e8c 100%);
-    
+
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.08);
     --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
-    
+
     --border-radius: 10px;
     --border-radius-lg: 15px;
     --border-radius-xl: 20px;
-    
+
     --transition: all 0.3s ease;
     --transition-fast: all 0.2s ease;
 }
@@ -506,22 +506,22 @@ body {
         bottom: 1rem;
         right: 1rem;
     }
-    
+
     .fab-button {
         width: 50px;
         height: 50px;
         font-size: 1.25rem;
     }
-    
+
     .btn {
         padding: 0.5rem 1rem;
         font-size: 0.9rem;
     }
-    
+
     .card {
         margin-bottom: 1rem;
     }
-    
+
     .form-control, .form-select {
         padding: 0.6rem 0.8rem;
         font-size: 0.9rem;
@@ -534,16 +534,16 @@ body {
         --border-radius-lg: 12px;
         --border-radius-xl: 16px;
     }
-    
+
     .container {
         padding-left: 1rem;
         padding-right: 1rem;
     }
-    
+
     .navbar-brand {
         font-size: 1.25rem;
     }
-    
+
     .modal-dialog {
         margin: 1rem;
     }
@@ -555,23 +555,23 @@ body {
         --dark-color: #e9ecef;
         --light-color: #212529;
     }
-    
+
     body {
-        background-color: #121212;
+        background-color: #ede6e6;
         color: var(--dark-color);
     }
-    
+
     .card {
         background-color: #1e1e1e;
         color: var(--dark-color);
     }
-    
+
     .form-control {
         background-color: #2d2d2d;
         border-color: #404040;
         color: var(--dark-color);
     }
-    
+
     .form-control:focus {
         background-color: #2d2d2d;
         color: var(--dark-color);
@@ -586,12 +586,12 @@ body {
     .alert {
         display: none !important;
     }
-    
+
     .card {
         box-shadow: none;
         border: 1px solid #ddd;
     }
-    
+
     body {
         background: white;
         color: black;
@@ -1178,7 +1178,7 @@ body {
     .stats-card {
         margin-bottom: 1rem;
     }
-    
+
     .calendar-day {
         min-height: 100px;
     }
@@ -1188,11 +1188,11 @@ body {
     .page-header {
         padding: 1.5rem 0;
     }
-    
+
     .stats-card {
         padding: 1rem;
     }
-    
+
     .stat-number {
         font-size: 1.75rem;
     }
@@ -1203,23 +1203,23 @@ body {
         min-height: 80px;
         padding: 0.25rem;
     }
-    
+
     .event-item,
     .task-item {
         font-size: 0.6rem;
         padding: 1px 4px;
     }
-    
+
     .profile-avatar {
         width: 100px;
         height: 100px;
         font-size: 2.5rem;
     }
-    
+
     .bulk-actions {
         padding: 0.75rem;
     }
-    
+
     .filter-bar {
         padding: 0.75rem;
     }
@@ -1229,31 +1229,31 @@ body {
     .stats-card {
         padding: 1rem 0.75rem;
     }
-    
+
     .stat-number {
         font-size: 1.5rem;
     }
-    
+
     .page-header {
         padding: 1rem 0;
     }
-    
+
     .section-title {
         font-size: 1.1rem;
     }
-    
+
     .timeline {
         padding-left: 0;
     }
-    
+
     .timeline::before {
         left: 1rem;
     }
-    
+
     .timeline-item {
         padding-left: 2.5rem;
     }
-    
+
     .timeline-marker {
         left: 0.75rem;
     }
@@ -1264,11 +1264,11 @@ body {
     .btn {
         border: 2px solid currentColor;
     }
-    
+
     .card {
         border: 2px solid #333;
     }
-    
+
     .form-control {
         border: 2px solid #333;
     }
@@ -1289,10 +1289,6 @@ body {
     --dark-color: #e9ecef;
 }
 
-[data-theme="dark"] body {
-    background-color: #121212;
-    color: var(--dark-color);
-}
 
 [data-theme="dark"] .card,
 [data-theme="dark"] .stats-card,
@@ -1313,18 +1309,18 @@ body {
     .no-print {
         display: none !important;
     }
-    
+
     .print-full-width {
         width: 100% !important;
         max-width: none !important;
     }
-    
+
     .page-header {
         background: white !important;
         color: black !important;
         box-shadow: none !important;
     }
-    
+
     .card {
         break-inside: avoid;
         page-break-inside: avoid;

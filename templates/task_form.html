@@ -10,16 +10,16 @@
     <div class="card-header text-center bg-secondary text-white">
       <h3 class="mb-0">{{ 'Editar Tarea' if action=='edit' else 'Nueva Tarea' }}</h3>
     </div>
-    <div class="card-body">
+    <div class="card-body ">
       <form method="POST">
         <div class="row g-3">
           <div class="col-md-6">
-            <label for="title" class="form-label">Título</label>
+            <label for="title" class="form-label text-primary-emphasis">Título</label>
             <input type="text" id="title" name="title" class="form-control" required
                    value="{{ task.title if action=='edit' else '' }}">
           </div>
           <div class="col-md-6">
-            <label for="priority" class="form-label">Prioridad</label>
+            <label for="priority" class="form-label  text-primary-emphasis">Prioridad</label>
             <select id="priority" name="priority" class="form-select">
               <option value="Alta" {% if action=='edit' and task.priority=='Alta' %}selected{% endif %}>Alta</option>
               <option value="Media" {% if action=='edit' and task.priority=='Media' %}selected{% endif %}>Media</option>
@@ -27,12 +27,12 @@
             </select>
           </div>
           <div class="col-md-6">
-            <label for="due_date" class="form-label">Fecha de vencimiento</label>
+            <label for="due_date" class="form-label  text-primary-emphasis">Fecha de vencimiento</label>
             <input type="date" id="due_date" name="due_date" class="form-control" required
                    value="{{ task.due_date.strftime('%Y-%m-%d') if action=='edit' and task.due_date }}">
           </div>
           <div class="col-md-6">
-            <label for="status" class="form-label">Estado</label>
+            <label for="status" class="form-label  text-primary-emphasis">Estado</label>
             <select id="status" name="status" class="form-select">
               <option value="Pendiente" {% if action=='edit' and task.status=='Pendiente' %}selected{% endif %}>Pendiente</option>
               <option value="En progreso" {% if action=='edit' and task.status=='En progreso' %}selected{% endif %}>En progreso</option>
@@ -40,7 +40,7 @@
             </select>
           </div>
           <div class="col-12">
-            <label for="description" class="form-label">Descripción</label>
+            <label for="description" class="form-label  text-primary-emphasis">Descripción</label>
             <textarea id="description" name="description" rows="4" class="form-control">{{ task.description if action=='edit' else '' }}</textarea>
           </div>
         </div>
